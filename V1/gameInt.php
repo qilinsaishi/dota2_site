@@ -1,17 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
- <?php
- require_once "function/init.php";
- $data = [
-     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
-     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
-     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>$config['source'],"fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>$config['source'],"fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-     "currentPage"=>["name"=>"index","site_id"=>$config['site_id']]
- ];
- $return = curl_post($config['api_get'],json_encode($data),1);
- ?>
+<?php
+require_once "function/init.php";
+$data = [
+    "gameConfig"=>$config['game'],
+    "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
+];
+$return = curl_post($config['api_get'],json_encode($data),1);
+?>
 <head>
 <meta charset="UTF-8" />
 <meta name="renderer" content="webkit">
@@ -19,7 +15,7 @@
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>夺塔电竞</title>
-<?php renderHeaderJsCss($config);?>
+    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -29,117 +25,187 @@
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-          <?php generateNav($config,"index");?>
+          <?php generateNav($config,"game");?>
       </ul>
     </div>  
     <div class="clear"></div>
   </div>
 </div>
 <div class="head_h"></div>
-<div class="swiper-container sj_ban">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide" style="background:url(images/ban1.jpg) no-repeat center / cover;"></div>
-    <div class="swiper-slide" style="background:url(images/ban1.jpg) no-repeat center / cover;"></div>
-    <div class="swiper-slide" style="background:url(images/ban1.jpg) no-repeat center / cover;"></div>
-    <div class="swiper-slide" style="background:url(images/ban1.jpg) no-repeat center / cover;"></div>
-  </div>
-  <div class="swiper-pagination"></div>
-</div>
 <div class="container">
-  <div class="swiper-container pc_ban">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="<?php echo $config['site_url'];?>/images/ban1.jpg"></div>
-      <div class="swiper-slide"><img src="<?php echo $config['site_url'];?>/images/ban1.jpg"></div>
-      <div class="swiper-slide"><img src="<?php echo $config['site_url'];?>/images/ban1.jpg"></div>
-      <div class="swiper-slide"><img src="<?php echo $config['site_url'];?>/images/ban1.jpg"></div>
-    </div>
-    <div class="swiper-pagination"></div>
-  </div>
-  <div class="sy_zh">
+  <div class="dq_wz"><a href="">首页</a> > DOTA2介绍</div>
+  <div class="yx_jj">
     <div class="sy_bt">
-      <div class="b_t">热门英雄</div>
+      <div class="b_t">游戏介绍</div>
+      <div class="clear"></div>
+    </div>
+    <div class="jj_nr">
+      <div class="row">
+        <div class="col-lg-5 col-12">
+          <div class="t_p"><img src="<?php echo $return['gameConfig']['data']['logo'];?>"></div>
+        </div>
+        <div class="col-lg-7 col-12">
+          <div class="w_z"> <?php echo $return['gameConfig']['data']['content'];?></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="yx_lb">
+    <div class="sy_bt">
+      <div class="b_t">英雄列表</div>
       <div class="m_r">
         <div class="bg"></div>
         <a href="">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
-    <div class="zy_nr">
-      <div class="rm_yx">
-        <ul class="row">
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx1.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx2.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx3.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx4.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx5.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx6.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx7.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx8.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx9.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx10.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx11.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx12.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx13.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx14.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx15.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx16.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx17.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx18.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx19.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx20.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx21.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx22.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx23.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx24.png"></a></div>
-          </li>
-        </ul>
+    <div class="yx_nr">
+      <div class="row">
+        <div class="yx_lx"><a href="">智力型</a></div>
+        <div class="yx_zs">
+          <ul class="row">
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
+                <div class="w_z">力丸</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
+                <div class="w_z">上古泰坦</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
+                <div class="w_z">馬爾斯</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
+                <div class="w_z">烏爾薩</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
+                <div class="w_z">聖堂刺客</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="yx_lx"><a href="">敏捷型</a></div>
+        <div class="yx_zs">
+          <ul class="row">
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
+                <div class="w_z">力丸</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
+                <div class="w_z">上古泰坦</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
+                <div class="w_z">馬爾斯</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
+                <div class="w_z">烏爾薩</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
+                <div class="w_z">聖堂刺客</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="yx_lx"><a href="">力量型</a></div>
+        <div class="yx_zs">
+          <ul class="row">
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
+                <div class="w_z">力丸</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
+                <div class="w_z">上古泰坦</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
+                <div class="w_z">馬爾斯</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
+                <div class="w_z">烏爾薩</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
+                <div class="w_z">聖堂刺客</div>
+              </a></div>
+            </li>
+            <li>
+              <div class="n_r"><a href="">
+                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
+                <div class="w_z">劍聖</div>
+              </a></div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -353,12 +419,38 @@
         <div class="xw_nr">
           <div class="zx_zx">
             <ul>
-                <?php foreach($return['informationList']['data'] as $key => $value) {?>
-                    <li>
-                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
-                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
-                    </li>
-                <?php }?>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -375,13 +467,46 @@
         <div class="xw_nr">
           <div class="yx_gl">
             <ul>
-                <?php foreach($return['informationList_2']['data'] as $key => $value) {?>
-                    <li>
-                        <span>视频</span>
-                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
-                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
-                    </li>
-                <?php }?>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <div class="s_j">01-19</div>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -400,16 +525,16 @@
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-md-3 col-6">
+          <li class="col-lg-3 col-6">
             <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
           </li>
-          <li class="col-md-3 col-6">
+          <li class="col-lg-3 col-6">
             <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
           </li>
-          <li class="col-md-3 col-6">
+          <li class="col-lg-3 col-6">
             <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
           </li>
-          <li class="col-md-3 col-6">
+          <li class="col-lg-3 col-6">
             <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
           </li>
         </ul>
@@ -428,26 +553,5 @@
   <div class="container"><span>Copyright©2021 www.qilindianjing.com All rights reserved</span><span>琼ICP备19001306号-2</span></div>
 </div>
 <div class="fh_top"><img src="<?php echo $config['site_url'];?>/images/fh_top.png"></div>
-<script type="text/javascript" src="js/swiper.min.js"></script> 
-<script type="text/javascript">
-  var galleryTop = new Swiper('.pc_ban', {
-	pagination:'.swiper-pagination',
-	paginationClickable: true,
-	slideToClickedSlide: true,
-	autoplayDisableOnInteraction:false,
-	autoplay:6000,
-	loop:true,
-  });
-</script>
-<script type="text/javascript">
-  var galleryTop = new Swiper('.sj_ban', {
-	pagination:'.swiper-pagination',
-	paginationClickable: true,
-	slideToClickedSlide: true,
-	autoplayDisableOnInteraction:false,
-	autoplay:6000,
-	loop:true,
-  });
-</script>
 </body>
 </html>
