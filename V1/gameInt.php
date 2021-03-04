@@ -128,102 +128,20 @@ $return = curl_post($config['api_get'],json_encode($data),1);
         <div class="zh_nr">
           <div class="rm_zd">
             <ul>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a1.jpg"></div>
-                      <div class="w_z">Newbee</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a2.jpg"></div>
-                      <div class="w_z">FORZE</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a3.jpg"></div>
-                      <div class="w_z">Predator</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a4.jpg"></div>
-                      <div class="w_z">DCEAW</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a7.jpg"></div>
-                      <div class="w_z">Phoenix</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a8.jpg"></div>
-                      <div class="w_z">matador</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a9.jpg"></div>
-                      <div class="w_z">NIGMA</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a10.jpg"></div>
-                      <div class="w_z">Cyberium</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
+                <?php $i=1;foreach ($return['teamList']['data'] as $team){
+                    if($i%2==1){?>
+                <li>
+                    <div class="row"><?php } ?>
+                        <div class="col-6">
+                            <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
+                                    <div class="t_b"><img src="<?php echo $team['logo'];?>"></div>
+                                    <div class="w_z"><?php echo $team['team_name'];?></div>
+                                </a></div>
+                        </div>
+                    <?php if($i%2==0){?>
+                    </div>
+                </li>
+                <?php }$i++;}?>
             </ul>
           </div>
         </div>
