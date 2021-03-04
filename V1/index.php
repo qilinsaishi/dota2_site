@@ -170,7 +170,7 @@
           <div class="b_t">热门资讯</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/newslist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -192,7 +192,7 @@
           <div class="b_t">游戏攻略</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/stralist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
