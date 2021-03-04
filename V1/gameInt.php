@@ -4,7 +4,13 @@
 require_once "function/init.php";
 $data = [
     "gameConfig"=>$config['game'],
-    "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
+    "dota2HeroList"=>["page"=>1,"page_size"=>1000],
+    "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
+    "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id'],"fields"=>"hero_type,hero_id,hero_name,logo"]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
 ?>
@@ -60,153 +66,24 @@ $return = curl_post($config['api_get'],json_encode($data),1);
       <div class="clear"></div>
     </div>
     <div class="yx_nr">
-      <div class="row">
-        <div class="yx_lx"><a href="">智力型</a></div>
-        <div class="yx_zs">
-          <ul class="row">
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="yx_lx"><a href="">敏捷型</a></div>
-        <div class="yx_zs">
-          <ul class="row">
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="yx_lx"><a href="">力量型</a></div>
-        <div class="yx_zs">
-          <ul class="row">
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-          </ul>
-        </div>
-      </div>
+        <?php foreach ($config['hero_type'] as $type => $type_name) {$count = 0;?>
+            <div class="row">
+                <div class="yx_lx"><a href=""><?php echo $type_name;?>型</a></div>
+                <div class="yx_zs">
+                    <ul class="row">
+                        <?php foreach ($return['dota2HeroList']['data'] as $hero) {
+                            if($hero['hero_type']==$type){ $count++;?>
+                                <li>
+                                    <div class="n_r"><a href="<?php echo $config['site_url']."/herodetail/".$hero['hero_id'];?>">
+                                            <div class="t_b"><img src="<?php echo $hero['logo'];?>"></div>
+                                            <div class="w_z"><?php echo $hero['hero_name'];?></div>
+                                        </a></div>
+                                </li>
+                        <?php if($count>=7){break;}}}?>
+                    </ul>
+                </div>
+            </div>
+        <?php }?>
     </div>
   </div>
   <div class="zd_tw">
@@ -363,42 +240,14 @@ $return = curl_post($config['api_get'],json_encode($data),1);
         <div class="zh_nr">
           <div class="mx_tj">
             <ul class="row">
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-                  <div class="w_z">Danil Skutin</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a2.png"></div>
-                  <div class="w_z">Nikobaby</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a3.png"></div>
-                  <div class="w_z">Miracle</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a4.png"></div>
-                  <div class="w_z">Limmp</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a5.png"></div>
-                  <div class="w_z">MNZ</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="n_r"><a href="">
-                  <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a6.png"></div>
-                  <div class="w_z">BOOM</div>
-                </a></div>
-              </li>
+              <?php foreach($return['playerList']['data'] as $player){?>
+                  <li class="col-4">
+                      <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                              <div class="t_p"><img src="<?php echo $player['logo'];?>"></div>
+                              <div class="w_z"><?php echo $player['player_name'];?></div>
+                          </a></div>
+                  </li>
+              <?php }?>
             </ul>
           </div>
         </div>
@@ -412,45 +261,19 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">热门资讯</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+            <a href="<?php echo $config['site_url'];?>/newslist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="zx_zx">
             <ul>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['informationList']['data'] as $key => $value) {?>
+                    <li>
+                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
+                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
@@ -460,53 +283,20 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">游戏攻略</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/strategylist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="yx_gl">
             <ul>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['informationList_2']['data'] as $key => $value) {?>
+                    <li>
+                        <span>视频</span>
+                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
+                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
