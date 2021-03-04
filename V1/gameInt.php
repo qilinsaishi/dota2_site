@@ -4,13 +4,13 @@
 require_once "function/init.php";
 $data = [
     "gameConfig"=>$config['game'],
-    "dota2HeroList"=>["page"=>1,"page_size"=>1000],
+    "dota2HeroList"=>["page"=>1,"page_size"=>1000,"fields"=>"hero_type,hero_id,hero_name,logo"],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-    "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id'],"fields"=>"hero_type,hero_id,hero_name,logo"]
+    "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
 ?>

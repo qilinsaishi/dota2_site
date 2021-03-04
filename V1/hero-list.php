@@ -1,5 +1,30 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+<?php
+require_once "function/init.php";
+$info['page']['page_size'] = 21;
+$page = $_GET['page']??1;
+if($page==''){
+    $page=1;
+}
+$type = $_GET['type']??key($config['hero_type']);
+if(!isset($config['hero_type'][$type]))
+{
+    $type = key($config['hero_type']);
+}
+$data = [
+    "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+    "dota2HeroList"=>["page"=>1,"hero_type"=>$type,"page_size"=>21,"page"=>$page,"fields"=>"hero_type,hero_id,hero_name,logo","cacheWith"=>"currentPage"],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
+    "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "currentPage"=>["name"=>"hero-list","site_id"=>$config['site_id'],"page"=>$page]
+];
+$return = curl_post($config['api_get'],json_encode($data),1);
+$info['page']['total_count'] = $return['dota2HeroList']['count'];
+$info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page']['page_size']);
+?>
 <head>
 <meta charset="UTF-8" />
 <meta name="renderer" content="webkit">
@@ -7,16 +32,7 @@
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>夺塔电竞</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<!--[if lt IE 9]>
-<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-<link rel="stylesheet" href="css/swiper.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="js/jquery-1.8.3.min.js" type="text/javascript" /></script>
-<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript" /></script>
-<script src="js/main.js" type="text/javascript" /></script>
+    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -26,15 +42,7 @@
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-        <li><a href="index.html">首页</a></li>
-        <li><a href="youxijieshao.html">游戏介绍</a></li>
-        <li class="on"><a href="yingxiongliebiao.html">英雄介绍</a></li>
-        <li><a href="youxisaishi.html">游戏赛事</a></li>
-        <li><a href="zhanduiliebiao.html">游戏战队</a></li>
-        <li><a href="xuanshouliebiao.html">游戏选手</a></li>
-        <li><a href="zixunliebiao.html">游戏资讯</a></li>
-        <li><a href="youxigonglue.html">游戏攻略</a></li>
-        <li><a href="youxishipin.html">游戏视频</a></li>
+          <?php generateNav($config,"hero");?>
       </ul>
     </div>  
     <div class="clear"></div>
@@ -52,150 +60,27 @@
       <div class="row f_b">
         <div class="yx_lx">
           <ul>
-            <li class="on"><a href="">智力型</a></li>
-            <li><a href="">敏捷型</a></li>
-            <li><a href="">力量型</a></li>
+              <?php
+              foreach ($config['hero_type'] as $hero_type => $type_name) {?>
+                  <li name="<?php echo $hero_type;?>" <?php if($hero_type==$type){?>class="on"<?php }?>><a href="<?php echo $config['site_url'];?>/herolist/<?php echo $hero_type;?>/"><?php echo $type_name;?>型</a></li>
+              <?php }?>
           </ul>
         </div>
         <div class="yx_zs yx_fy">
           <ul class="row">
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
+              <?php foreach ($return['dota2HeroList']['data'] as $hero) {?>
+              <li>
+              <div class="n_r"><a href="<?php echo $config['site_url']."/herodetail/".$hero['hero_id'];?>">
+                <div class="t_b"><img src="<?php echo $hero['logo'];?>"></div>
+                <div class="w_z"><?php echo $hero['hero_name'];?></div>
               </a></div>
             </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx9.png"></div>
-                <div class="w_z">力丸</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx2.png"></div>
-                <div class="w_z">上古泰坦</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx4.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx5.png"></div>
-                <div class="w_z">馬爾斯</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx6.png"></div>
-                <div class="w_z">烏爾薩</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx7.png"></div>
-                <div class="w_z">聖堂刺客</div>
-              </a></div>
-            </li>
-            <li>
-              <div class="n_r"><a href="yingxiongxiangqing.html">
-                <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/yx8.png"></div>
-                <div class="w_z">劍聖</div>
-              </a></div>
-            </li>
+              <?php }?>
           </ul>
         </div>
       </div>
       <div class="page">
-        <a href=""><</a>
-        <a href="" class="on">1</a>
-        <a href="">2</a>
-        <a href="">3</a>
-        <a href="">4</a>
-        <a href="">5</a>
-        <a href="">></a>
+          <?php render_page_pagination($info['page']['total_count'],$info['page']['page_size'],$page,$config['site_url']."/herolist/".$type); ?>
       </div>
     </div>
   </div>
