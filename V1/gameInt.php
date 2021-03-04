@@ -121,7 +121,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+            <a href="<?php echo $config['site_url'];?>/teamlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -151,7 +151,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">热门选手</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+            <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
