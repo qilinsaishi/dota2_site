@@ -4,6 +4,7 @@
  require_once "function/init.php";
  $data = [
      "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+     "dota2HeroList"=>["page"=>1,"page_size"=>24,"rand"=>1,"cacheWith"=>"currentPage"],
      "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
      "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
      "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
@@ -60,85 +61,18 @@
       <div class="b_t">热门英雄</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+        <a href="<?php echo $config['site_url'];?>/herolist">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zy_nr">
       <div class="rm_yx">
         <ul class="row">
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx1.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx2.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx3.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx4.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx5.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx6.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx7.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx8.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx9.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx10.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx11.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx12.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx13.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx14.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx15.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx16.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx17.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx18.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx19.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx20.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx21.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx22.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx23.png"></a></div>
-          </li>
-          <li>
-            <div class="t_b"><a href=""><img src="<?php echo $config['site_url'];?>/images/yx24.png"></a></div>
-          </li>
+            <?php foreach ($return['dota2HeroList']['data'] as $hero){?>
+                <li>
+                    <div class="t_b"><a href="<?php echo $config['site_url']."/herodetail/".$hero['hero_id'];?>"><img src="<?php echo $hero['logo'];?>"></a></div>
+                </li>
+                <?php }?>
         </ul>
       </div>
     </div>
