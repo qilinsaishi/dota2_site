@@ -13,7 +13,6 @@
      "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
  ];
  $return = curl_post($config['api_get'],json_encode($data),1);
- print_R($return['defaultConfig']['data']['default_team_img']);
  ?>
 <head>
 <meta charset="UTF-8" />
