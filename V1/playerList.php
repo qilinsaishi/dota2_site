@@ -11,8 +11,10 @@ $data = [
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"wanplus","fields"=>'player_id,player_name,logo'],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>10,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
-    "currentPage"=>["name"=>"team-list","site_id"=>$config['site_id'],"page"=>$page]
+    "currentPage"=>["name"=>"team-list","site_id"=>$config['site_id'],"page"=>$page],
+     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
 $info['page']['total_count'] = $return['playerList']['count'];
@@ -104,94 +106,33 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+            <a href="<?php echo $config['site_url']."/teamlist/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="rm_zd">
-            <ul>
-              <li>
-                <div class="row">
+              <?php $i=1;foreach ($return['teamList']['data'] as $team){
+                  if($i%2==1){?>
+                      <li>
+                      <div class="row"><?php } ?>
                   <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a1.jpg"></div>
-                      <div class="w_z">Newbee</div>
-                    </a></div>
+                      <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
+                              <div class="t_b">
+                                  <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
+                                      <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                  <?php }else{?>
+                                      <img src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                  <?php }?>
+
+                              </div>
+                              <div class="w_z"><?php echo $team['team_name'];?></div>
+                          </a></div>
                   </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a2.jpg"></div>
-                      <div class="w_z">FORZE</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a3.jpg"></div>
-                      <div class="w_z">Predator</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a4.jpg"></div>
-                      <div class="w_z">DCEAW</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a7.jpg"></div>
-                      <div class="w_z">Phoenix</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a8.jpg"></div>
-                      <div class="w_z">matador</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a9.jpg"></div>
-                      <div class="w_z">NIGMA</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a10.jpg"></div>
-                      <div class="w_z">Cyberium</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                  <?php if($i%2==0){?>
+                      </div>
+                      </li>
+                  <?php }$i++;}?>
           </div>
         </div>
       </div>
@@ -200,37 +141,19 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
           <div class="b_t">热门资讯</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+            <a href="<?php echo $config['site_url']."/newslist/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="zx_zx">
             <ul>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['informationList']['data'] as $key => $value) {?>
+                    <li>
+                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
+                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
