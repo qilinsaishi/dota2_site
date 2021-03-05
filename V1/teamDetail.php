@@ -11,12 +11,15 @@ $data = [
     "totalTeamInfo"=>[$team_id],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
     "keywordMapList"=>["fields"=>"content_id","source_type"=>"team","source_id"=>$team_id,"page_size"=>100,"content_type"=>"information","list"=>["page_size"=>6,"fields"=>"id,title,create_time"]],
-    //"informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
-    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>8,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>7,"except_team"=>$team_id,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "currentPage"=>["name"=>"team","id"=>$team_id,"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
+if(!isset($return["totalTeamInfo"]['data']['team_id']) || $return["totalTeamInfo"]['data']['game'] != $config['game'] )
+{
+    render404($config);
+}
 ?>
 <head>
 <meta charset="UTF-8" />
@@ -447,7 +450,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
     <div class="zy_nr">
       <div class="xg_zd">
         <ul class="row">
-            <?php $i = 1;foreach($return['teamList']['data'] as $team){if($team['team_id']!=$team_id && $i<=8){?>
+            <?php $i = 1;foreach($return['teamList']['data'] as $team){?>
                 <li><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
                         <div class="t_b">
                             <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
@@ -458,7 +461,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
                         </div>
                         <p><?php echo $team['team_name'];?></p>
                     </a></li>
-            <?php }$i++;}?>
+            <?php }?>
         </ul>
       </div>
     </div>

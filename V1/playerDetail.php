@@ -1,5 +1,44 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+<?php
+require_once "function/init.php";
+$player_id = $_GET['player_id']??0;
+if($player_id<=0)
+{
+    render404($config);
+}
+$data = [
+    "totalPlayerInfo"=>[$player_id],
+    "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+    "keywordMapList"=>["fields"=>"content_id","source_type"=>"player","source_id"=>$player_id,"page_size"=>100,"content_type"=>"information","list"=>["page_size"=>6,"fields"=>"id,title,create_time"]],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "currentPage"=>["name"=>"player","id"=>$player_id,"site_id"=>$config['site_id']]
+];
+$return = curl_post($config['api_get'],json_encode($data),1);
+if(!isset($return["totalPlayerInfo"]['data']['player_id']) || $return["totalPlayerInfo"]['data']['game'] != $config['game'] )
+{
+    render404($config);
+}
+if(count($return['keywordMapList']['data'])==0)
+{
+    $data2 = [
+        "keywordMapList"=>["fields"=>"content_id","source_type"=>"team","source_id"=>$player_id,"page_size"=>100,"content_type"=>"information","list"=>["page_size"=>6,"fields"=>"id,title,create_time"]],
+        "currentPage"=>["name"=>"player","id"=>$player_id,"site_id"=>$config['site_id']]
+    ];
+    $return2 = curl_post($config['api_get'],json_encode($data2),1);
+    $connectedInformation = $return2['keywordMapList']['data'];
+}
+else
+{
+    $connectedInformation = $return['keywordMapList']['data'];
+}
+$data3 = [
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"except_team"=>$return['totalPlayerInfo']['data']['team_id'],"cacheWith"=>"currentPage"],
+    "currentPage"=>["name"=>"player","id"=>$player_id,"site_id"=>$config['site_id']]
+];
+$return3 = curl_post($config['api_get'],json_encode($data3),1);
+?>
 <head>
 <meta charset="UTF-8" />
 <meta name="renderer" content="webkit">
@@ -7,16 +46,7 @@
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>夺塔电竞</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<!--[if lt IE 9]>
-<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-<link rel="stylesheet" href="css/swiper.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="js/jquery-1.8.3.min.js" type="text/javascript" /></script>
-<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript" /></script>
-<script src="js/main.js" type="text/javascript" /></script>
+    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -26,15 +56,7 @@
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-        <li><a href="index.html">首页</a></li>
-        <li><a href="youxijieshao.html">游戏介绍</a></li>
-        <li><a href="yingxiongliebiao.html">英雄介绍</a></li>
-        <li><a href="youxisaishi.html">游戏赛事</a></li>
-        <li><a href="zhanduiliebiao.html">游戏战队</a></li>
-        <li class="on"><a href="xuanshouliebiao.html">游戏选手</a></li>
-        <li><a href="zixunliebiao.html">游戏资讯</a></li>
-        <li><a href="youxigonglue.html">游戏攻略</a></li>
-        <li><a href="youxishipin.html">游戏视频</a></li>
+          <?php generateNav($config,"player");?>
       </ul>
     </div>  
     <div class="clear"></div>
@@ -50,12 +72,12 @@
       </div>
       <div class="col-lg-10 col-8">
         <div class="j_s">
-          <div class="x_m">Limmp</div>
-          <div class="j_j">地域：<br>
-          中文名：<br>
-          英文名：Limmp<br>
-          游戏ID/位置：Mid<br>
-          个人简介：</div>
+          <div class="x_m"><?php echo $return['totalPlayerInfo']['data']['player_name']?></div>
+          <div class="j_j">地域：<?php echo $return['totalPlayerInfo']['data']['country'];?><br>
+          中文名：<?php echo $return['totalPlayerInfo']['data']['cn_name'];?><br>
+          英文名：<?php echo $return['totalPlayerInfo']['data']['en_name'];?><br>
+          游戏ID/位置：<?php echo $return['totalPlayerInfo']['data']['position'];?><br>
+          个人简介：<?php echo $return['totalPlayerInfo']['data']['description'];?></div>
         </div>
       </div>
     </div>
@@ -67,66 +89,22 @@
     </div>
     <div class="mx_tj">
       <ul class="row">
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-            <div class="w_z">
-              <div class="x_m">Miracle-</div>
-              <div class="j_s">Amer Al-barqawi</div>
-              <div class="j_s">位置: Carry</div>
-            </div>
-          </a></div>
-        </li>
+        <?php foreach($return['totalPlayerInfo']['data']['playerList'] as $player){?>
+          <li class="col-lg-2 col-4">
+              <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                      <div class="t_p">
+                          <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
+                              <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                          <?php }else{?>
+                              <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                          <?php }?>
+                      </div>
+                      <div class="w_z">
+                          <div class="x_m"><?php echo $player['player_name'];?></div>
+                          <div class="j_s">位置: <?php echo $player['position'];?></div>
+                      </div>
+                  </a></div>
+        <?php }?>
       </ul>
     </div>
   </div>
@@ -211,185 +189,57 @@
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zh_nr">
           <div class="rm_zd">
             <ul>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a1.jpg"></div>
-                      <div class="w_z">Newbee</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a2.jpg"></div>
-                      <div class="w_z">FORZE</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a3.jpg"></div>
-                      <div class="w_z">Predator</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a4.jpg"></div>
-                      <div class="w_z">DCEAW</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a7.jpg"></div>
-                      <div class="w_z">Phoenix</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a8.jpg"></div>
-                      <div class="w_z">matador</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a9.jpg"></div>
-                      <div class="w_z">NIGMA</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a10.jpg"></div>
-                      <div class="w_z">Cyberium</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
+                <?php $i=1;foreach ($return['teamList']['data'] as $team){
+                    if($i%2==1){?>
+                        <li>
+                        <div class="row"><?php } ?>
+                    <div class="col-6">
+                        <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
+                                <div class="t_b">
+                                    <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
+                                        <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                    <?php }else{?>
+                                        <img src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                    <?php }?>
+
+                                </div>
+                                <div class="w_z"><?php echo $team['team_name'];?></div>
+                            </a></div>
+                    </div>
+                    <?php if($i%2==0){?>
+                        </div>
+                        </li>
+                    <?php }$i++;}?>
             </ul>
           </div>
         </div>
       </div>
       <div class="col-lg-6 col-12">
         <div class="sy_bt">
-          <div class="b_t">赛事资讯</div>
+          <div class="b_t">相关资讯</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/newslist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zh_nr">
           <div class="yx_gl">
             <ul>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($connectedInformation as $key => $value) {?>
+                    <li>
+                        <span>视频</span>
+                        <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
+                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
@@ -431,36 +281,19 @@
     </div>
     <div class="mx_tj">
       <ul class="row">
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
-        <li class="col-lg-2 col-4">
-          <div class="n_r"><a href="">
-            <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/a1.png"></div>
-          </a></div>
-        </li>
+        <?php foreach($return3['playerList']['data'] as $player){?>
+            <li class="col-lg-2 col-4">
+                <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                        <div class="t_p">
+                            <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
+                                <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                            <?php }else{?>
+                                <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                            <?php }?>
+                        </div>
+                    </a></div>
+            </li>
+        <?php }?>
       </ul>
     </div>
   </div>
