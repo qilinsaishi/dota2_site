@@ -10,6 +10,7 @@ $data = [
     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -134,8 +135,14 @@ $return = curl_post($config['api_get'],json_encode($data),1);
                     <div class="row"><?php } ?>
                         <div class="col-6">
                             <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
-                                    <div class="t_b"><img src="<?php echo $team['logo'];?>"></div>
-                                    <div class="w_z"><?php echo $team['team_name'];?></div>
+                                <div class="t_b">
+                                    <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
+                                        <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                    <?php }else{?>
+                                        <img src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
+                                    <?php }?>
+                                </div>
+                                <div class="w_z"><?php echo $team['team_name'];?></div>
                                 </a></div>
                         </div>
                     <?php if($i%2==0){?>
@@ -161,7 +168,13 @@ $return = curl_post($config['api_get'],json_encode($data),1);
               <?php foreach($return['playerList']['data'] as $player){?>
                   <li class="col-4">
                       <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
-                              <div class="t_p"><img src="<?php echo $player['logo'];?>"></div>
+                              <div class="t_p">
+                                  <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
+                                      <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                  <?php }else{?>
+                                      <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                  <?php }?>
+                              </div>
                               <div class="w_z"><?php echo $player['player_name'];?></div>
                           </a></div>
                   </li>
