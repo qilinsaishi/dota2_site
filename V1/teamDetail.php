@@ -43,7 +43,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="">首页</a> > <a href="">游戏战队</a> > <?php echo $return['totalTeamInfo']['data']['team_name'];?></div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="">游戏战队</a> > <?php echo $return['totalTeamInfo']['data']['team_name'];?></div>
   <div class="zd_js">
     <div class="row">
       <div class="col-lg-3 col-4">

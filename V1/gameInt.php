@@ -40,7 +40,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="">首页</a> > DOTA2介绍</div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > DOTA2介绍</div>
   <div class="yx_jj">
     <div class="sy_bt">
       <div class="b_t">游戏介绍</div>

@@ -43,7 +43,7 @@ $info['page']['total_page'] = ceil($return['teamList']['count']/$info['page']['p
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="">首页</a> > 游戏战队</div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > 游戏战队</div>
   <div class="zd_lb">
     <div class="sy_bt">
       <div class="b_t">战队列表</div>

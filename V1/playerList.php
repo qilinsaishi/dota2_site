@@ -1,5 +1,23 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+<?php
+require_once "function/init.php";
+$info['page']['page_size'] = 24;
+$page = $_GET['page']??1;
+if($page==''){
+    $page=1;
+}
+$data = [
+    "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"wanplus","fields"=>'player_id,player_name,logo'],
+    "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "currentPage"=>["name"=>"team-list","site_id"=>$config['site_id'],"page"=>$page]
+];
+$return = curl_post($config['api_get'],json_encode($data),1);
+$info['page']['total_count'] = $return['playerList']['count'];
+$info['page']['total_page'] = ceil($return['playerList']['count']/$info['page']['page_size']);
+?>
 <head>
 <meta charset="UTF-8" />
 <meta name="renderer" content="webkit">
@@ -7,16 +25,7 @@
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>夺塔电竞</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<!--[if lt IE 9]>
-<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-<link rel="stylesheet" href="css/swiper.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="js/jquery-1.8.3.min.js" type="text/javascript" /></script>
-<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript" /></script>
-<script src="js/main.js" type="text/javascript" /></script>
+    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -26,15 +35,7 @@
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-        <li><a href="index.html">首页</a></li>
-        <li><a href="youxijieshao.html">游戏介绍</a></li>
-        <li><a href="yingxiongliebiao.html">英雄介绍</a></li>
-        <li class="on"><a href="youxisaishi.html">游戏赛事</a></li>
-        <li><a href="zhanduiliebiao.html">游戏战队</a></li>
-        <li><a href="xuanshouliebiao.html">游戏选手</a></li>
-        <li><a href="zixunliebiao.html">游戏资讯</a></li>
-        <li><a href="youxigonglue.html">游戏攻略</a></li>
-        <li><a href="youxishipin.html">游戏视频</a></li>
+          <?php generateNav($config,"player");?>
       </ul>
     </div>  
     <div class="clear"></div>
@@ -42,65 +43,63 @@
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > 游戏赛事</div>
-  <div class="ss_lb">
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > 游戏选手</div>
+  <div class="xs_lb">
     <div class="sy_bt">
-      <div class="b_t">赛事列表</div>
+      <div class="b_t">选手列表</div>
       <div class="clear"></div>
     </div>
-    <div class="ss_nr">
+    <div class="xs_nr">
       <ul class="row">
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-        </li>
-        <li class="col-lg-3 col-6">
-          <div class="t_p"><a href="saishixiangqing.html"><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-        </li>
+        <?php foreach($return['playerList']['data'] as $player){?>
+            <li>
+                <div class="t_p"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                        <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
+                            <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                        <?php }else{?>
+                            <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                        <?php }?>
+                        <div class="w_z"><?php echo $player['player_name'];?></div>
+                    </a></div>
+            </li>
+        <?php }?>
       </ul>
       <div class="page">
-        <a href=""><</a>
-        <a href="" class="on">1</a>
-        <a href="">2</a>
-        <a href="">3</a>
-        <a href="">4</a>
-        <a href="">5</a>
-        <a href="">></a>
+          <?php render_page_pagination($info['page']['total_count'],$info['page']['page_size'],$page,$config['site_url']."/playerlist"); ?>
+      </div>
+    </div>
+  </div>
+  <div class="zd_tw">
+    <div class="sy_bt">
+      <div class="b_t">热门赛事</div>
+      <div class="m_r">
+        <div class="bg"></div>
+        <a href="">MORE +</a>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="zx_nr">
+      <div class="tw_lb">
+        <ul class="row">
+          <li class="col-lg-3 col-6">
+            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
+          </li>
+          <li class="col-lg-3 col-6">
+            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
+          </li>
+          <li class="col-lg-3 col-6">
+            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
+          </li>
+          <li class="col-lg-3 col-6">
+            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
   <div class="sy_zh">
     <div class="row">
-      <div class="col-lg-6 col-12">
+      <div class="col-lg-4 col-12">
         <div class="sy_bt">
           <div class="b_t">热门战队</div>
           <div class="m_r">
@@ -109,7 +108,7 @@
           </div>
           <div class="clear"></div>
         </div>
-        <div class="zh_nr">
+        <div class="xw_nr">
           <div class="rm_zd">
             <ul>
               <li>
@@ -192,117 +191,97 @@
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a5.jpg"></div>
-                      <div class="w_z">SAG</div>
-                    </a></div>
-                  </div>
-                  <div class="col-6">
-                    <div class="n_r"><a href="">
-                      <div class="t_b"><img src="<?php echo $config['site_url'];?>/images/a6.jpg"></div>
-                      <div class="w_z">elephant</div>
-                    </a></div>
-                  </div>
-                </div>
-              </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-12">
+      <div class="col-lg-4 col-12">
         <div class="sy_bt">
-          <div class="b_t">赛事资讯</div>
+          <div class="b_t">热门资讯</div>
           <div class="m_r">
             <div class="bg"></div>
             <a href="">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
-        <div class="zh_nr">
+        <div class="xw_nr">
           <div class="zx_zx">
             <ul>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
               <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <div class="s_j">01-19</div>
                 <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="zd_tw">
-    <div class="sy_bt">
-      <div class="b_t">赛事视频</div>
-      <div class="m_r">
-        <div class="bg"></div>
-        <a href="">MORE +</a>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <div class="zx_nr">
-      <div class="tw_lb">
-        <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-          </li>
-        </ul>
+      <div class="col-lg-4 col-12">
+        <div class="sy_bt">
+          <div class="b_t">战队视频</div>
+          <div class="m_r">
+            <div class="bg"></div>
+            <a href="">MORE +</a>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div class="xw_nr">
+          <div class="yx_gl">
+            <ul>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+              <li>
+                <span>视频</span>
+                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
