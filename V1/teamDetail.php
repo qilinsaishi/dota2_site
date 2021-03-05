@@ -1,5 +1,23 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+<?php
+require_once "function/init.php";
+$team_id = $_GET['team_id']??0;
+if($team_id<=0)
+{
+    render404($config);
+}
+$data = [
+    "totalTeamInfo"=>[$team_id],
+    "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>8,"source"=>"wanplus","fields"=>'team_id,team_name,logo'],
+    "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "currentPage"=>["name"=>"team","id"=>$team_id,"site_id"=>$config['site_id']]
+];
+$return = curl_post($config['api_get'],json_encode($data),1);
+print_R($return['totalTeamInfo']['data']);
+?>
 <head>
 <meta charset="UTF-8" />
 <meta name="renderer" content="webkit">
@@ -7,16 +25,7 @@
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>夺塔电竞</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<!--[if lt IE 9]>
-<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-<link rel="stylesheet" href="css/swiper.min.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="js/jquery-1.8.3.min.js" type="text/javascript" /></script>
-<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript" /></script>
-<script src="js/main.js" type="text/javascript" /></script>
+    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -26,15 +35,7 @@
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-        <li><a href="index.html">首页</a></li>
-        <li><a href="youxijieshao.html">游戏介绍</a></li>
-        <li><a href="yingxiongliebiao.html">英雄介绍</a></li>
-        <li><a href="youxisaishi.html">游戏赛事</a></li>
-        <li class="on"><a href="zhanduiliebiao.html">游戏战队</a></li>
-        <li><a href="xuanshouliebiao.html">游戏选手</a></li>
-        <li><a href="zixunliebiao.html">游戏资讯</a></li>
-        <li><a href="youxigonglue.html">游戏攻略</a></li>
-        <li><a href="youxishipin.html">游戏视频</a></li>
+          <?php generateNav($config,"team");?>
       </ul>
     </div>  
     <div class="clear"></div>
@@ -42,23 +43,29 @@
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="">首页</a> > <a href="">游戏战队</a> > TEAM NIGMA</div>
+  <div class="dq_wz"><a href="">首页</a> > <a href="">游戏战队</a> > <?php echo $return['totalTeamInfo']['data']['team_name'];?></div>
   <div class="zd_js">
     <div class="row">
       <div class="col-lg-3 col-4">
-        <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/zd.jpg"></div>
+        <div class="t_p">
+            <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
+                <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $return['totalTeamInfo']['data']['logo'];?>" title="<?php echo $return['totalTeamInfo']['data']['team_name'];?>" />
+            <?php }else{?>
+                <img src="<?php echo $return['totalTeamInfo']['data']['logo'];?>" title="<?php echo $return['totalTeamInfo']['data']['team_name'];?>" />
+            <?php }?>
+        </div>
       </div>
       <div class="col-lg-9 col-8">
         <div class="w_z">
-          <div class="x_m">TEAM NIGMA</div>
+          <div class="x_m"><?php echo $return['totalTeamInfo']['data']['team_name'];?></div>
           <div class="j_s">
             <ul>
-              <li><span>国家</span>欧洲</li>
-              <li><span>英文名</span>TEAM NIGMA</li>
-              <li><span>游戏战绩</span>105/130</li>
+              <li><span>国家</span><?php echo $return['totalTeamInfo']['data']['location'];?></li>
+              <li><span>英文名</span><?php echo $return['totalTeamInfo']['data']['en_name'];?></li>
+              <li><span>游戏战绩</span><?php echo implode("/",json_decode($return['totalTeamInfo']['data']['race_stat'],true));?></li>
             </ul>
           </div>
-          <div class="j_j">Team Nigma是一支欧洲战队，现在以1812分排名世界第7，队伍选手包括Miracle-，w33，MinD_ContRoL，GH,Kuroky。</div>
+          <div class="j_j"><?php echo $return['totalTeamInfo']['data']['description'];?></div>
         </div>
       </div>
     </div>
@@ -316,7 +323,7 @@
   </div>
   <div class="zd_cy">
     <div class="sy_bt">
-      <div class="b_t">热门选手</div>
+      <div class="b_t">战队成员</div>
       <div class="clear"></div>
     </div>
     <div class="mx_tj">
