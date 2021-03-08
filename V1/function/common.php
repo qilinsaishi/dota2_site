@@ -156,8 +156,7 @@
     }
     function renderCertification()
     {
-        echo '<div class="container">网络文化经营许可证：琼网文〔2015〕2197-011号     琼ICP备19001306号-3</div>';
-
+        echo '<div class="container"><span>Copyright©2021 www.kylinesport.com All rights reserved</span><span>网络文化经营许可证：琼网文〔2015〕2197-011号    琼ICP备19001306号-4</span></div>';
     }
     function str_replace_limit($search, $replace, $subject, $limit=-1){
         if(is_array($search)){

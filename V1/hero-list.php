@@ -263,7 +263,7 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
   </div>
 </div>
 <div class="banquan">
-  <div class="container"><span>Copyright©2021 www.qilindianjing.com All rights reserved</span><span>琼ICP备19001306号-2</span></div>
+    <?php renderCertification();?>
 </div>
 <div class="fh_top"><img src="<?php echo $config['site_url'];?>/images/fh_top.png"></div>
 </body>
