@@ -5,10 +5,11 @@
  $data = [
      "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
      "dota2HeroList"=>["page"=>1,"page_size"=>24,"rand"=>1,"cacheWith"=>"currentPage"],
-     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
-     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
-     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
+     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
+     "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
      "currentPage"=>["name"=>"index","site_id"=>$config['site_id']],
      "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
  ];
@@ -20,7 +21,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
-<title>夺塔电竞</title>
+    <title><?php echo $config['site_name'];?>_<?php echo $config['game_name'];?>电子竞技赛事资讯分析网</title>
+    <meta name="description" content="<?php echo $config['site_description'];?>">
+    <meta name=”Keywords” Content=”<?php echo $config['site_name'];?>″>
 <?php renderHeaderJsCss($config);?>
 </head>
 
@@ -83,25 +86,18 @@
       <div class="b_t">热门赛事</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+        <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-          </li>
+            <?php foreach ($return['tournament']['data'] as $tournament){?>
+                <li class="col-lg-3 col-6">
+                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>

@@ -32,7 +32,9 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
-<title>夺塔电竞</title>
+    <title><?php echo $config['game_name'];?>英雄列表_<?php echo $config['game_name'];?>有哪些英雄-<?php echo $config['site_name'];?></title>
+    <meta name="description" content="<?php echo $config['site_name'];?>提供<?php echo $config['game_name'];?>英雄列表，想了解<?php echo $config['game_name'];?>有哪些英雄，以及<?php echo $config['game_name'];?>英雄玩法攻略等，尽在<?php echo $config['site_name'];?>。">
+    <meta name=”Keywords” Content=”<?php echo $config['game_name'];?>英雄列表,<?php echo $config['game_name'];?>有哪些英雄″>
     <?php renderHeaderJsCss($config);?>
 </head>
 

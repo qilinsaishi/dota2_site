@@ -1,12 +1,23 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <?php
-require_once "function/init.php";
+ $hero_id = $_GET['hero_id'];
+ if($hero_id<=0)
+ {
+     render404($config);
+ }
+ require_once "function/init.php";
 $data = [
-    "gameConfig"=>$config['game'],
+    "dota2Hero"=>[$hero_id],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
+$return['dota2Hero']['data']['roles'] = json_decode($return['dota2Hero']['data']['roles'],true);
+$return['dota2Hero']['data']['stat'] = json_decode($return['dota2Hero']['data']['stat'],true);
+$return['dota2Hero']['data']['skill'] = json_decode($return['dota2Hero']['data']['skill'],true);
+$return['dota2Hero']['data']['talent'] = json_decode($return['dota2Hero']['data']['talent'],true);
+
+array_multisort(array_column($return['dota2Hero']['data']['talent'],"level"),SORT_ASC,$return['dota2Hero']['data']['talent']);
 ?>
 <head>
 <meta charset="UTF-8" />
@@ -14,8 +25,11 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
-<title>夺塔电竞</title>
-    <?php renderHeaderJsCss($config);?>
+    <title><?php echo $config['game_name'];?><?php echo $return['dota2Hero']['data']['cn_name'].$return['dota2Hero']['data']['hero_name'];?>介绍_<?php echo $return['dota2Hero']['data']['cn_name'].$return['dota2Hero']['data']['hero_name'];?>攻略-<?php echo $config['site_name'];?></title>
+    <?php $desctiption = mb_str_split($return['dota2Hero']['data']['description'],200);
+    if(strlen($desctiption)<10){$desctiption = "";}?>
+    <meta name="description" content="<?php echo $desctiption;?>">
+    <meta name=”Keywords” Content=”<?php echo $return['dota2Hero']['data']['hero_name'];?>,<?php echo $config['game_name'];?><?php echo $return['dota2Hero']['data']['hero_name'];?>″>    <?php renderHeaderJsCss($config);?>
 </head>
 
 <body>
@@ -25,15 +39,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
     <div class="an"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
     <div class="nav">
       <ul>
-        <li><a href="index.html">首页</a></li>
-        <li><a href="youxijieshao.html">游戏介绍</a></li>
-        <li class="on"><a href="yingxiongliebiao.html">英雄介绍</a></li>
-        <li><a href="youxisaishi.html">游戏赛事</a></li>
-        <li><a href="zhanduiliebiao.html">游戏战队</a></li>
-        <li><a href="xuanshouliebiao.html">游戏选手</a></li>
-        <li><a href="zixunliebiao.html">游戏资讯</a></li>
-        <li><a href="youxigonglue.html">游戏攻略</a></li>
-        <li><a href="youxishipin.html">游戏视频</a></li>
+          <?php generateNav($config,"hero");?>
       </ul>
     </div>  
     <div class="clear"></div>
@@ -41,21 +47,20 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="">英雄介绍</a> > 撼地者</div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="<?php echo $config['site_url']."/herolist/";?>">英雄介绍</a> > <?php echo $return['dota2Hero']['data']['hero_name'];?></div>
   <div class="yx_js">
     <div class="row">
       <div class="col-lg-5 col-12">
-        <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/yx.jpg"></div>
+        <div class="t_p"><img src="<?php echo $return['dota2Hero']['data']['logo'];?>"></div>
       </div>
       <div class="col-lg-5 col-12">
         <div class="w_z">
-          <div class="x_m"><img src="<?php echo $config['site_url'];?>/images/pk.jpg">帕克</div>
+          <div class="x_m"><img src="<?php echo $return['dota2Hero']['data']['logo_icon'];?>"><?php echo $return['dota2Hero']['data']['hero_name'];?></div>
           <div class="j_s">
             <ul>
               <li><span>攻击类型</span>远程</li>
-              <li><span>定位</span>先手-控制-逃生-爆发</li>
-              <li><span>阵营</span><img src="<?php echo $config['site_url'];?>/images/dw.png">天辉</li>
-              <li><span>其他简称</span>仙女龙、精灵龙</li>
+              <li><span>定位</span><?php echo implode("-",$return['dota2Hero']['data']['roles']);?></li>
+              <li><span>阵营</span><img src="<?php echo $return['dota2Hero']['data']['logo_rediant'];?>"><?php echo $return['dota2Hero']['data']['rediant'];?></li>
             </ul>
           </div>
         </div>
@@ -71,7 +76,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
       </div>
       <div class="clear"></div>
     </div>
-    <div class="gs_nr">当别人第一眼看到帕克的时候，都会觉得它十分淘气，是小孩子性格。然而正是这种错觉让帕克的真实个性得以隐藏。仙女龙一族的寿 命趋于无限，帕克则还处于仙女龙的幼年形态，然而它在这一形态也已经过了上千年了。因此即使从某种意义上来说，帕克还算是幼年，但它的幼年期将会-直持续到城市归于尘土。帕克的真实动机是什么，旁人完全无法捉摸，而在那嬉戏的外表下也有可能隐藏着更隐秘的目的。而仅有能让人体会到帕克真实个性的，是它对顽皮捣乱的无尽热衷。
+    <div class="gs_nr"><?php echo $return['dota2Hero']['data']['description'];?>
     <div class="clear"></div>
     </div>
   </div>
@@ -86,31 +91,20 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="jn_js">
             <div class="hd">
               <ul>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn1.png"></li>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn2.png"></li>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn3.png"></li>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn4.png"></li>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn5.png"></li>
-                <li><img src="<?php echo $config['site_url'];?>/images/jn6.png"></li>
+                  <?php foreach($return['dota2Hero']['data']['stat'] as $stat){?>
+                <li><img src="<?php echo $stat['stat_logo'];?>" title="<?php echo $stat['property_title'];?>"></li>
+                  <?php }?>
               </ul>
             </div>
             <div class="bd">
-              <div class="n_r">每点增加<strong>20</strong>点生命值<br>
-              每点增加<strong>0.7%</strong>生命恢复增强<br>
-              英雄每升一级获得点数：<strong>2.4</strong></div>
-              <div class="n_r">每点增加<strong>116</strong>点护甲<br>
-              每点增加<strong>1%</strong>攻击速度<br>
-              英雄每升一级获得点数：<strong>2.5</strong></div>
-              <div class="n_r">每点增加<strong>1</strong>点攻击力，每点增加<strong>0.15%</strong>廣法抗性<br>
-              每点增加<strong>12</strong>点廣法值，每点增加<strong>2.0%</strong>廣法恢复增强<br>
-              每点增加<strong>0.07%</strong>技能增强，英雄每升一级获得点数：<strong>3.5</strong></div>
-              <div class="n_r">物理防御：<strong>0</strong><br>
-              物理伤害抗性：<strong>11%</strong><br>
-              廣法伤害抗性：<strong>25%</strong></div>
-              <div class="n_r"></div>
-              <div class="n_r">攻击速度：<strong>122</strong>（2.03秒攻击一次）<br>
-              攻击伤害：<strong>23一34</strong><br>
-              攻击距离：<strong>550</strong></div>
+                <?php foreach($return['dota2Hero']['data']['stat'] as $stat){?>
+                    <div class="n_r">
+                        <?php foreach($stat['property_cont'] as $detail){
+                            $detail = str_replace("span","strong",$detail);
+                            echo $detail."<br>";?>
+                    <?php }?>
+                    </div>
+                <?php }?>
             </div>
           </div>
         </div>
@@ -124,41 +118,21 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="mw_dp">
             <div class="hd">
               <ul class="row">
-                <li>10</li>
-                <li>15</li>
-                <li>20</li>
-                <li>25</li>
+                <?php foreach($return['dota2Hero']['data']['talent'] as $talent){?>
+                  <li><?php echo $talent['level'];?></li>
+                  <?php }?>
               </ul>
             </div>
             <div class="bd">
-              <div class="n_r">
-                <div class="j_n">
-                  <span>相位转移攻击敌人</span>
-                  <span>+12%技能增强</span>
-                </div>
-                <div class="j_g">1相位转移攻击（施放相位转移时可以对攻击距离内所有单位发动一次攻击，此时攻击距离+200），梦境缠绕快速攻击梦境圈200距离内的敌人（每0.75秒 攻击射程内所有敌人）</div>
-              </div>
-              <div class="n_r">
-                <div class="j_n">
-                  <span>相位转移攻击敌人</span>
-                  <span>+12%技能增强</span>
-                </div>
-                <div class="j_g">2相位转移攻击（施放相位转移时可以对攻击距离内所有单位发动一次攻击，此时攻击距离+200），梦境缠绕快速攻击梦境圈200距离内的敌人（每0.75秒 攻击射程内所有敌人）</div>
-              </div>
-              <div class="n_r">
-                <div class="j_n">
-                  <span>相位转移攻击敌人</span>
-                  <span>+12%技能增强</span>
-                </div>
-                <div class="j_g">3相位转移攻击（施放相位转移时可以对攻击距离内所有单位发动一次攻击，此时攻击距离+200），梦境缠绕快速攻击梦境圈200距离内的敌人（每0.75秒 攻击射程内所有敌人）</div>
-              </div>
-              <div class="n_r">
-                <div class="j_n">
-                  <span>相位转移攻击敌人</span>
-                  <span>+12%技能增强</span>
-                </div>
-                <div class="j_g">4相位转移攻击（施放相位转移时可以对攻击距离内所有单位发动一次攻击，此时攻击距离+200），梦境缠绕快速攻击梦境圈200距离内的敌人（每0.75秒 攻击射程内所有敌人）</div>
-              </div>
+                <?php foreach($return['dota2Hero']['data']['talent'] as $talent){?>
+                    <div class="n_r">
+                        <div class="j_n">
+                            <span><?php echo $talent['explain']['0'];?></span>
+                            <span><?php echo $talent['explain']['1'];?></span>
+                        </div>
+                        <div class="j_g"><?php echo $talent['explain']['0'].",".$talent['explain']['1'];?></div>
+                    </div>
+                <?php }?>
             </div>
           </div>
         </div>
@@ -174,84 +148,27 @@ $return = curl_post($config['api_get'],json_encode($data),1);
       <div class="yx_gx">
         <div class="hd">
           <ul>
-            <li><img src="<?php echo $config['site_url'];?>/images/jn7.png"></li>
-            <li><img src="<?php echo $config['site_url'];?>/images/jn8.png"></li>
-            <li><img src="<?php echo $config['site_url'];?>/images/jn9.png"></li>
-            <li><img src="<?php echo $config['site_url'];?>/images/jn10.png"></li>
-            <li><img src="<?php echo $config['site_url'];?>/images/jn11.png"></li>
+              <?php foreach($return['dota2Hero']['data']['skill'] as $skill){?>
+                  <li><img src="<?php echo $skill['skill_logo'];?>"></li>
+              <?php }?>
           </ul>
         </div>
         <div class="bd">
-          <div class="n_r">
-            <h3>幻象法球</h3>
-            <p>帕克向直线方向发出一个魔法球，对经过路径上的敌人造成伤害。在幻象法球飞行过程中，帕克可以使用灵动之翼来传送到法球所在的位置。<br><br>
-            幻象法球在飞行途中提供顺畅视野。<br>
-            将自己传送到幻象法球可以躲避攻击和技能弹道。</p>
-            <ul class="row">
-              <li><span>最大距离</span>1950</li>
-              <li><span>伤害</span>751/150/225/300</li>
-              <li><span>伤害类型</span>魔法</li>
-              <li><span>无视技能免疫</span>否</li>
-              <li><span>魔法消耗</span>80/100/120/140点</li>
-              <li><span>冷却时间</span>13/12/11/10秒</li>
-            </ul>
-          </div>
-          <div class="n_r">
-            <h3>新月之痕</h3>
-            <p>帕克向直线方向发出一个魔法球，对经过路径上的敌人造成伤害。在幻象法球飞行过程中，帕克可以使用灵动之翼来传送到法球所在的位置。<br><br>
-            幻象法球在飞行途中提供顺畅视野。<br>
-            将自己传送到幻象法球可以躲避攻击和技能弹道。</p>
-            <ul class="row">
-              <li><span>最大距离</span>1950</li>
-              <li><span>伤害</span>751/150/225/300</li>
-              <li><span>伤害类型</span>魔法</li>
-              <li><span>无视技能免疫</span>否</li>
-              <li><span>魔法消耗</span>80/100/120/140点</li>
-              <li><span>冷却时间</span>13/12/11/10秒</li>
-            </ul>
-          </div>
-          <div class="n_r">
-            <h3>相位转移</h3>
-            <p>帕克向直线方向发出一个魔法球，对经过路径上的敌人造成伤害。在幻象法球飞行过程中，帕克可以使用灵动之翼来传送到法球所在的位置。<br><br>
-            幻象法球在飞行途中提供顺畅视野。<br>
-            将自己传送到幻象法球可以躲避攻击和技能弹道。</p>
-            <ul class="row">
-              <li><span>最大距离</span>1950</li>
-              <li><span>伤害</span>751/150/225/300</li>
-              <li><span>伤害类型</span>魔法</li>
-              <li><span>无视技能免疫</span>否</li>
-              <li><span>魔法消耗</span>80/100/120/140点</li>
-              <li><span>冷却时间</span>13/12/11/10秒</li>
-            </ul>
-          </div>
-          <div class="n_r">
-            <h3>灵动之翼</h3>
-            <p>帕克向直线方向发出一个魔法球，对经过路径上的敌人造成伤害。在幻象法球飞行过程中，帕克可以使用灵动之翼来传送到法球所在的位置。<br><br>
-            幻象法球在飞行途中提供顺畅视野。<br>
-            将自己传送到幻象法球可以躲避攻击和技能弹道。</p>
-            <ul class="row">
-              <li><span>最大距离</span>1950</li>
-              <li><span>伤害</span>751/150/225/300</li>
-              <li><span>伤害类型</span>魔法</li>
-              <li><span>无视技能免疫</span>否</li>
-              <li><span>魔法消耗</span>80/100/120/140点</li>
-              <li><span>冷却时间</span>13/12/11/10秒</li>
-            </ul>
-          </div>
-          <div class="n_r">
-            <h3>梦境缠绕</h3>
-            <p>帕克向直线方向发出一个魔法球，对经过路径上的敌人造成伤害。在幻象法球飞行过程中，帕克可以使用灵动之翼来传送到法球所在的位置。<br><br>
-            幻象法球在飞行途中提供顺畅视野。<br>
-            将自己传送到幻象法球可以躲避攻击和技能弹道。</p>
-            <ul class="row">
-              <li><span>最大距离</span>1950</li>
-              <li><span>伤害</span>751/150/225/300</li>
-              <li><span>伤害类型</span>魔法</li>
-              <li><span>无视技能免疫</span>否</li>
-              <li><span>魔法消耗</span>80/100/120/140点</li>
-              <li><span>冷却时间</span>13/12/11/10秒</li>
-            </ul>
-          </div>
+            <?php foreach($return['dota2Hero']['data']['skill'] as $skill){?>
+                <div class="n_r">
+                    <h3><?php echo $skill['title'];?></h3>
+                    <p><?php echo $skill['skill_intro']."，".$skill['skill_intro'];?></p>
+                    <ul class="row">
+                        <?php foreach($skill['skill_list'] as $skill_detail){
+                            $skill_detail = str_replace(":","</span>",$skill_detail);
+                            $skill_detail = str_replace("：","</span>",$skill_detail);
+                            echo "<li><span>".$skill_detail."</li>";
+                            ?>
+
+                        <?php }?>
+                    </ul>
+                </div>
+            <?php }?>
         </div>
       </div>
     </div>

@@ -4,12 +4,13 @@
 require_once "function/init.php";
 $data = [
     "gameConfig"=>$config['game'],
-    "dota2HeroList"=>["page"=>1,"page_size"=>1000,"fields"=>"hero_type,hero_id,hero_name,logo"],
+    "dota2HeroList"=>["page"=>1,"page_size"=>1000,"rand"=>1,"fields"=>"hero_type,hero_id,hero_name,logo","cache_time"=>7*86400,"cacheWith"=>"currentPage"],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
-    "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
-    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+    "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time","cache_time"=>7*86400,"cacheWith"=>"currentPage"],
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>7*86400],
+    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>7*86400],
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
@@ -21,7 +22,9 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
-<title>夺塔电竞</title>
+    <title><?php echo $config['game_name'];?>-游戏介绍</title><?php renderHeaderJsCss($config);?>
+    <meta name="description" content="这是一个信息很完整的<?php echo $config['game_name'];?>游戏资讯站">
+    <meta name="keywords" content="<?php echo $config['game_name'];?>">
     <?php renderHeaderJsCss($config);?>
 </head>
 
@@ -62,7 +65,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
       <div class="b_t">英雄列表</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+        <a href="<?php echo $config['site_url']."/herolist/";?>">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
@@ -92,25 +95,18 @@ $return = curl_post($config['api_get'],json_encode($data),1);
       <div class="b_t">热门赛事</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+        <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-          </li>
+            <?php foreach ($return['tournament']['data'] as $tournament){?>
+                <li class="col-lg-3 col-6">
+                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
