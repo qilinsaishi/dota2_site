@@ -10,7 +10,7 @@
 $data = [
     "dota2Hero"=>[$hero_id],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>7*86400],
-    "keywordMapList"=>["fields"=>"content_id","source_type"=>"hero","source_id"=>$hero_id,"page_size"=>8,"content_type"=>"information","list"=>["page_size"=>6,"type"=>4,"fields"=>"id,title,create_time"]],
+    "keywordMapList"=>["fields"=>"content_id","source_type"=>"hero","source_id"=>$hero_id,"page_size"=>8,"content_type"=>"information","list"=>["page_size"=>6,"type"=>4,"fields"=>"id,title,create_time"],"cacheWith"=>"currentPage","cache_time"=>7*86400],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);

@@ -26,7 +26,8 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=640, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
-<title>夺塔电竞</title>
+    <title><?php echo $config['game_name'];?>职业选手名单大全-<?php echo $config['site_name'];?></title>
+    <meta name=”Keywords” Content=”<?php echo $config['game_name'];?>职业选手名单,<?php echo $config['game_name'];?>职业选手大全″>
     <?php renderHeaderJsCss($config);?>
 </head>
 
