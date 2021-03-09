@@ -9,9 +9,15 @@
  require_once "function/init.php";
 $data = [
     "dota2Hero"=>[$hero_id],
+    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>7*86400],
+    "keywordMapList"=>["fields"=>"content_id","source_type"=>"hero","source_id"=>$hero_id,"page_size"=>8,"content_type"=>"information","list"=>["page_size"=>6,"type"=>4,"fields"=>"id,title,create_time"]],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
+if(!isset($return["dota2Hero"]['data']['hero_id']))
+{
+    render404($config);
+}
 $return['dota2Hero']['data']['roles'] = json_decode($return['dota2Hero']['data']['roles'],true);
 $return['dota2Hero']['data']['stat'] = json_decode($return['dota2Hero']['data']['stat'],true);
 $return['dota2Hero']['data']['skill'] = json_decode($return['dota2Hero']['data']['skill'],true);
@@ -180,67 +186,23 @@ array_multisort(array_column($return['dota2Hero']['data']['talent'],"level"),SOR
           <div class="b_t">相关选手</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="rm_xs">
             <ul class="row">
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t1.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t2.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t3.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t4.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t5.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t6.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t7.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t8.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href="">
-                  <img src="<?php echo $config['site_url'];?>/images/t9.png">
-                  <div class="w_z">名字</div>
-                </a></div>
-              </li>
+                <?php
+                foreach($return["playerList"]['data'] as $type => $player)
+                {?>
+                    <li class="col-4">
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/playerdetail/<?php echo $player['player_id'];?>">
+                                <img src="<?php echo $player['logo'];?>">
+                                <div class="w_z"><?php echo $player['player_name'];?></div>
+                            </a></div>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
@@ -250,37 +212,18 @@ array_multisort(array_column($return['dota2Hero']['data']['talent'],"level"),SOR
           <div class="b_t">英雄攻略</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/strategylist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="zx_zx">
             <ul>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['keywordMapList']['data'] as $key => $value) {?>
+                    <li>
+                        <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
