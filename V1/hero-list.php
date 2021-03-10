@@ -163,7 +163,13 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
                 <?php foreach($return['playerList']['data'] as $player){?>
                     <li class="col-4">
                         <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
-                                <div class="t_p"><img src="<?php echo $player['logo'];?>"></div>
+                                <div class="t_p">
+                                    <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
+                                        <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                    <?php }else{?>
+                                        <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                    <?php }?>
+                                </div>
                                 <div class="w_z"><?php echo $player['player_name'];?></div>
                             </a></div>
                     </li>
@@ -207,12 +213,11 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
           </div>
           <div class="clear"></div>
         </div>
-        <div class="xw_nr">
-          <div class="yx_gl">
+          <div class="xw_nr">
+              <div class="zx_zx">
             <ul>
                 <?php foreach($return['informationList_2']['data'] as $key => $value) {?>
                     <li>
-                        <span>视频</span>
                         <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
                         <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
                     </li>

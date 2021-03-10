@@ -215,12 +215,11 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           </div>
           <div class="clear"></div>
         </div>
-        <div class="xw_nr">
-          <div class="yx_gl">
+          <div class="xw_nr">
+              <div class="zx_zx">
             <ul>
                 <?php foreach($return['informationList_2']['data'] as $key => $value) {?>
                     <li>
-                        <span>视频</span>
                         <div class="s_j"><?php echo substr($value['create_time'],0,10);?></div>
                         <a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
                     </li>

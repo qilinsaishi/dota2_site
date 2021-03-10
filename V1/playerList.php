@@ -8,13 +8,14 @@ if($page==''){
     $page=1;
 }
 $data = [
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"wanplus","fields"=>'player_id,player_name,logo'],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>10,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"7","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "currentPage"=>["name"=>"team-list","site_id"=>$config['site_id'],"page"=>$page],
-     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
 $info['page']['total_count'] = $return['playerList']['count'];
@@ -77,25 +78,18 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
       <div class="b_t">热门赛事</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-          </li>
+            <?php foreach ($return['tournament']['data'] as $tournament){?>
+                <li class="col-lg-3 col-6">
+                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
@@ -161,48 +155,22 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
       </div>
       <div class="col-lg-4 col-12">
         <div class="sy_bt">
-          <div class="b_t">战队视频</div>
+          <div class="b_t">队员视频</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="xw_nr">
           <div class="yx_gl">
             <ul>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['video_list']['data'] as $key => $value) {?>
+                    <li>
+                        <span>视频</span>
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a></div>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>

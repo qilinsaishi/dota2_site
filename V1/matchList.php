@@ -15,7 +15,7 @@ $data = [
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
-    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+    "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"3","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "currentPage"=>["name"=>"infoList","type"=>$zxtype,"page"=>$page,"page_size"=>$info['page']['page_size'],"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -165,7 +165,7 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">赛事新闻</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/newslist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -201,13 +201,13 @@ $return = curl_post($config['api_get'],json_encode($data),1);
                 <?php $i=1;foreach ($return['teamList']['data'] as $team){?>
                         <li>
                             <span class="s_z">NO.<?php echo $i;?></span>
-                            <span class="z_d">
+                            <a href = "<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>"><span class="z_d">
                         <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
                             <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
                         <?php }else{?>
                             <img src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
                         <?php }?>
-                    <em><?php echo $team['team_name'];?></em></span>
+                                    <em><?php echo $team['team_name'];?></em></span></a>
                             <div class="clear"></div>
                         </li>
                     <?php $i++;}?>
