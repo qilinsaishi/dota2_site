@@ -11,6 +11,6 @@ rewrite  ^/herolist  /hero-list.php?type=&page=?  last;
 rewrite  ^/herodetail/(.*)$  /hero.php?hero_id=$1?  last;
 #rewrite  ^/scws/(.*)$  /scwsList.php?ids=$1?  last;
 rewrite  ^/tournamentlist/(.*)$   /tournamentList.php?page=$1?  last;
-rewrite  ^/tournament/(.*)$   /tournament.php?id=$1?  last;
+rewrite  ^/tournament/(.*)$   /tournament.php?tournament_id=$1?  last;
 rewrite  ^/videolist/(.*)$   /videoList.php?page=$1?  last;
 rewrite  ^/videodetail/(.*)$   /video.php?id=$1?  last;

@@ -9,10 +9,10 @@
  }
  $data = [
      "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-     "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"gamedota2"],
+     "tournament"=>["dataType"=>"tournamentList","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"gamedota2"],
      "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
      "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
-     "currentPage"=>["name"=>"matchList","page"=>$page,"site_id"=>$config['site_id']],
+     "currentPage"=>["name"=>"tournamentList","page"=>$page,"site_id"=>$config['site_id']],
  ];
  $return = curl_post($config['api_get'],json_encode($data),1);
  $info['page']['total_count'] = $return['tournament']['count'];

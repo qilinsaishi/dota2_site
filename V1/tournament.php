@@ -2,23 +2,26 @@
 <html lang="zh-CN">
 <?php
 require_once "function/init.php";
-$info['page']['page_size'] = 10;
-$info['type'] = $_GET['type']??"info";
-$page = $_GET['page']??1;
-if($page==''){
-    $page=1;
+$tournament_id = $_GET['tournament_id']??0;
+if(strlen($tournament_id)<32)
+{
+    render404($config);
 }
-$zxtype=($info['type']!="info")?"/strategylist":"/newslist";
 $data = [
-    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
+    "tournament"=>["source"=>"gamedota2","tournament_id"=>$tournament_id],
+    "matchList"=>["source"=>"gamedota2","dataType"=>"matchList","tournament_id"=>$tournament_id,"page"=>1,"page_size"=>4],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>9,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"3","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
-    "currentPage"=>["name"=>"infoList","type"=>$zxtype,"page"=>$page,"page_size"=>$info['page']['page_size'],"site_id"=>$config['site_id']]
+    "currentPage"=>["name"=>"tournament","id"=>$tournament_id,"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
+if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament"]['data']['game'] != $config['game'] )
+{
+    render404($config);
+}
 ?>
 <head>
 <meta charset="UTF-8" />
@@ -45,97 +48,42 @@ $return = curl_post($config['api_get'],json_encode($data),1);
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="">游戏赛事</a> > DPC中国赛事</div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="<?php echo $config['site_url'];?>/tournamentlist/">游戏赛事</a> > <?php echo $return['tournament']['data']['tournament_name'];?></div>
   <div class="jq_sc">
     <div class="sy_bt">
       <div class="b_t">近期赛程</div>
       <div class="clear"></div>
     </div>
-    <div class="sc_nr">
-      <div class="swiper-container swiper-ss">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><a href="">
-            <div class="s_j">2021年2月2日16:00</div>
-            <div class="x_x">
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a1.jpg">
-                <p>Newbee</p>
+      <div class="sc_nr">
+          <div class="swiper-container swiper-ss">
+              <div class="swiper-wrapper">
+                  <?php foreach($return['matchList']['data'] as $match){?>
+                      <div class="swiper-slide"><a href="">
+                              <div class="s_j">2021年2月2日16:00</div>
+                              <div class="x_x">
+                                  <div class="z_d">
+                                      <img src="<?php echo $match['home_team_info']['logo']??$return['defaultConfig']['data']['default_team_img']['value'];?>">
+                                      <p><?php echo $match['home_team_info']['team_name']??"未知队伍";?></p>
+                                  </div>
+                                  <div class="s_g">
+                                      <strong><?php echo $match['home_score'];?>&nbsp;:&nbsp;<?php echo $match['away_score'];?></strong>
+                                      <p>进行中</p>
+                                  </div>
+                                  <div class="z_d">
+                                      <img src="<?php echo $match['away_team_info']['logo']??$return['defaultConfig']['data']['default_team_img']['value'];?>">
+                                      <p><?php echo $match['away_team_info']['team_name']??"未知队伍";?></p>
+                                  </div>
+                                  <div class="clear"></div>
+                              </div>
+                              <div class="s_s">S级联赛</div>
+                          </a></div>
+                  <?php }?>
               </div>
-              <div class="s_g">
-                <strong>0&nbsp;:&nbsp;1</strong>
-                <p>进行中</p>
-              </div>
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a3.jpg">
-                <p>Predator</p>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="s_s">S级联赛</div>
-          </a></div>
-          <div class="swiper-slide"><a href="">
-            <div class="s_j">2021年2月2日16:00</div>
-            <div class="x_x">
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a1.jpg">
-                <p>Newbee</p>
-              </div>
-              <div class="s_g">
-                <strong>0&nbsp;:&nbsp;1</strong>
-                <p>进行中</p>
-              </div>
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a3.jpg">
-                <p>Predator</p>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="s_s">S级联赛</div>
-          </a></div>
-          <div class="swiper-slide"><a href="">
-            <div class="s_j">2021年2月2日16:00</div>
-            <div class="x_x">
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a1.jpg">
-                <p>Newbee</p>
-              </div>
-              <div class="s_g">
-                <strong>0&nbsp;:&nbsp;1</strong>
-                <p>进行中</p>
-              </div>
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a3.jpg">
-                <p>Predator</p>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="s_s">S级联赛</div>
-          </a></div>
-          <div class="swiper-slide"><a href="">
-            <div class="s_j">2021年2月2日16:00</div>
-            <div class="x_x">
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a1.jpg">
-                <p>Newbee</p>
-              </div>
-              <div class="s_g">
-                <strong>0&nbsp;:&nbsp;1</strong>
-                <p>进行中</p>
-              </div>
-              <div class="z_d">
-                <img src="<?php echo $config['site_url'];?>/images/a3.jpg">
-                <p>Predator</p>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="s_s">S级联赛</div>
-          </a></div>
-        </div>
-        <div class="swiper-pagination"></div>
+              <div class="swiper-pagination"></div>
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
       </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
   </div>
   <div class="sy_zh">
     <div class="row">
@@ -249,14 +197,12 @@ $return = curl_post($config['api_get'],json_encode($data),1);
     <div class="js_nr">
       <div class="row">
         <div class="col-lg-5 col-12">
-          <div class="t_p"><img src="<?php echo $config['site_url'];?>/images/ss5.jpg"></div>
+          <div class="t_p"><img src="<?php echo $return['tournament']['data']['logo'];?>"></div>
         </div>
         <div class="col-lg-7 col-12">
           <div class="w_z">
-            <h3>TH E INTERNATIONAL XI</h3>
-            <p>赛事开始于： 15 八月，2022<br>
-            奖金池： $ 1,600,000<br>
-            赛季： The International</p>
+            <h3><?php echo $return['tournament']['data']['tournament_name'];?></h3>
+            <p></p>
           </div>
         </div>
       </div>
