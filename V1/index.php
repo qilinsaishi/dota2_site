@@ -96,7 +96,7 @@
         <ul class="row">
             <?php foreach ($return['tournament']['data'] as $tournament){?>
                 <li class="col-lg-3 col-6">
-                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                    <div class="t_p"><a href="<?php echo $config['site_url']."/tournament/".$tournament['tournament_id'];?>"><img src="<?php echo $tournament['logo'];?>"></a></div>
                 </li>
             <?php }?>
         </ul>
@@ -110,7 +110,7 @@
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/teamlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
