@@ -68,13 +68,13 @@ $info['page']['total_page'] = intval($return['informationList']['count']/$info['
                 <?php foreach($return['informationList']['data'] as $key => $value) {?>
                     <li class="row">
                         <div class="col-lg-2 col-5">
-                            <div class="t_p"><a href="<?php echo $config['site_url']; ?>/newsdetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>"></a></div>
+                            <div class="t_p"><a href="<?php echo $config['site_url']; ?>/videodetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>"></a></div>
                         </div>
                         <div class="col-lg-10 col-7">
                             <div class="w_z">
-                                <h3><a href="<?php echo $config['site_url']; ?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a></h3>
+                                <h3><a href="<?php echo $config['site_url']; ?>/videodetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a></h3>
                                 <p><?php echo strip_tags(html_entity_decode($value['content'])); ?></p>
-                                <a href="<?php echo $config['site_url']; ?>/newsdetail/<?php echo $value['id'];?>" class="m_r">read more +</a>
+                                <a href="<?php echo $config['site_url']; ?>/videodetail/<?php echo $value['id'];?>" class="m_r">read more +</a>
                             </div>
                         </div>
                     </li>
