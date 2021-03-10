@@ -240,9 +240,9 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-            <?php foreach($return['video_list']['data'] as $key => $value) {?>
+            <?php foreach($return['video_list']['data'] as $key => $video) {?>
                 <li class="col-md-3 col-6">
-                    <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>" title="<?php echo $value['title'];?>"></a></div>
+                    <div class="t_p"><a href="<?php echo $config['site_url'];?>/videodetail/<?php echo $video['id'];?>"><img src="<?php echo $video['logo'];?>" title="<?php echo $video['title'];?>"></a></div>
                 </li>
             <?php }?>
         </ul>

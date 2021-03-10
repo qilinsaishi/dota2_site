@@ -165,10 +165,10 @@ $info['page']['total_page'] = ceil($return['playerList']['count']/$info['page'][
         <div class="xw_nr">
           <div class="yx_gl">
             <ul>
-                <?php foreach($return['video_list']['data'] as $key => $value) {?>
+                <?php foreach($return['video_list']['data'] as $key => $video) {?>
                     <li>
                         <span>视频</span>
-                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><?php echo $value['title'];?></a></div>
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/videodetail/<?php echo $video['id'];?>"><?php echo $video['title'];?></a></div>
                     </li>
                 <?php }?>
             </ul>

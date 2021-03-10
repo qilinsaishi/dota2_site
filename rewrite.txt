@@ -12,3 +12,4 @@ rewrite  ^/herodetail/(.*)$  /hero.php?hero_id=$1?  last;
 #rewrite  ^/scws/(.*)$  /scwsList.php?ids=$1?  last;
 rewrite  ^/matchlist/(.*)$   /matchList.php?page=$1?  last;
 rewrite  ^/videolist/(.*)$   /videoList.php?page=$1?  last;
+rewrite  ^/videodetail/(.*)$   /video.php?id=$1?  last;
