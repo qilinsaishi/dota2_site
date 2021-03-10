@@ -10,6 +10,7 @@
      "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
      "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
      "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
+     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>4,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
      "currentPage"=>["name"=>"index","site_id"=>$config['site_id']],
      "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
  ];
@@ -227,25 +228,18 @@
       <div class="b_t">热门视频</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-md-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-          </li>
-          <li class="col-md-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-          </li>
-          <li class="col-md-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-          </li>
-          <li class="col-md-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-          </li>
+            <?php foreach($return['video_list']['data'] as $key => $value) {?>
+                <li class="col-md-3 col-6">
+                    <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>" title="<?php echo $value['title'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>

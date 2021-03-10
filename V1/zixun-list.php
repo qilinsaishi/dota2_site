@@ -13,6 +13,8 @@ $data = [
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
     "informationList"=>["game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"type"=>$info['type']=="info"?"1,2,3,5":"4","fields"=>"*"],
+    "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>6,"type"=>$info['type']!="info"?"1,2,3,5":"4","fields"=>"*"],
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "currentPage"=>["name"=>"infoList","type"=>$zxtype,"page"=>$page,"page_size"=>$info['page']['page_size'],"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -89,25 +91,18 @@ $info['page']['total_page'] = intval($return['informationList']['count']/$info['
           <div class="b_t">热门赛事</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="rm_ss">
             <ul>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss1.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss2.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss3.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss4.jpg"></a></div>
-              </li>
+                <?php foreach ($return['tournament']['data'] as $tournament){?>
+                    <li>
+                        <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
@@ -147,21 +142,19 @@ $info['page']['total_page'] = intval($return['informationList']['count']/$info['
           </div>
         </div>
         <div class="sy_bt">
-          <div class="b_t">最新攻略</div>
+          <div class="b_t">最新<?php if($info['type']=="info"){echo "攻略";}else{echo "资讯";}?></div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'].(($info['type']=="info")?"/strategylist/":"/newslist/")?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr">
           <div class="rm_zx">
             <ul>
-              <li><a href="">[打野思路] 16.0玄策实战复盘教学</a></li>
-              <li><a href="">TS暖阳FMVP英雄镜第一视角：世冠总决赛巅峰</a></li>
-              <li><a href="">公爵自创玄策闪电鞭打法让你玄策不再迷茫</a></li>
-              <li><a href="">8分钟掌握玄策18个操作技巧+8种自主练习技</a></li>
-              <li><a href="">艾琳不再珍貴，入坑1270天的玩家告訴你，它才是珍寶！</a></li>
+                <?php foreach($return['informationList_2']['data'] as $key => $value) {?>
+                    <li><a href="<?php echo $config['site_url']; ?>/newsdetail/<?php echo $info['id'];?>"><?php echo $value['title'];?></a></li>
+                <?php }?>
             </ul>
           </div>
         </div>

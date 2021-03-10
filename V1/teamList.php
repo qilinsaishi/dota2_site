@@ -12,6 +12,8 @@ $data = [
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"source"=>"wanplus","fields"=>'team_id,team_name,logo'],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>9,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "currentPage"=>["name"=>"team-list","site_id"=>$config['site_id'],"page"=>$page]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -78,25 +80,18 @@ $info['page']['total_page'] = ceil($return['teamList']['count']/$info['page']['p
       <div class="b_t">热门赛事</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url'];?>/matchlist/">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-          </li>
+            <?php foreach ($return['tournament']['data'] as $tournament){?>
+                <li class="col-lg-3 col-6">
+                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
@@ -130,40 +125,18 @@ $info['page']['total_page'] = ceil($return['teamList']['count']/$info['page']['p
           <div class="b_t">战队视频</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zh_nr">
           <div class="zd_sp">
             <ul class="row">
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-              </li>
-              <li class="col-4">
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-              </li>
+                <?php foreach($return['video_list']['data'] as $key => $value) {?>
+                    <li class="col-4">
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>" title="<?php echo $value['title'];?>"></a></div>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>

@@ -19,7 +19,9 @@ $data = [
     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"4","fields"=>"id,title,site_time,create_time"],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+    "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>4,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "currentPage"=>["name"=>"hero-list","site_id"=>$config['site_id'],"page"=>$page,"type"=>$type]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -92,25 +94,18 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
       <div class="b_t">热门赛事</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp1.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp2.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp3.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp4.jpg"></a></div>
-          </li>
+            <?php foreach ($return['tournament']['data'] as $tournament){?>
+                <li class="col-lg-3 col-6">
+                    <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
@@ -122,7 +117,7 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/teamlist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -136,10 +131,10 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
                     <div class="col-6">
                         <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
                             <div class="t_b">
-                                <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
-                                    <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
+                                    <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
                                 <?php }else{?>
-                                    <img src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
+                                    <img src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
                                 <?php }?>
                             </div>
                             <div class="w_z"><?php echo $team['team_name'];?></div>
@@ -233,25 +228,18 @@ $info['page']['total_page'] = ceil($return['dota2HeroList']['count']/$info['page
       <div class="b_t">热门视频</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-          </li>
-          <li class="col-lg-3 col-6">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-          </li>
+            <?php foreach($return['video_list']['data'] as $key => $value) {?>
+                <li class="col-md-3 col-6">
+                    <div class="t_p"><a href="<?php echo $config['site_url'];?>/newsdetail/<?php echo $value['id'];?>"><img src="<?php echo $value['logo'];?>" title="<?php echo $value['title'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
