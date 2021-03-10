@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <?php
 require_once "function/init.php";
-$info['page']['page_size'] = 4;
 $id = $_GET['id']??1;
 if($id<=0)
 {
@@ -14,6 +13,8 @@ $data = [
     "tournament"=>["page"=>1,"page_size"=>8],
     "playerList"=>["dataType"=>"totalPlayerList","page"=>1,"page_size"=>9,"game"=>$config['game'],"source"=>"wanplus","rand"=>1,"cacheWith"=>"currentPage","fields"=>'player_id,player_name,logo'],
     "defaultConfig"=>["keys"=>["contact","sitemap"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>6,"type"=>"7","rand"=>1,"fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
+    "tournament"=>["dataType"=>"tournament","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
     "currentPage"=>["name"=>"info","id"=>$id,"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -158,25 +159,16 @@ foreach($keywordsList as $word => $wordInfo)
           <div class="b_t">热门赛事</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url']."/matchlist/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="rm_ss">
             <ul>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss1.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss2.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss3.jpg"></a></div>
-              </li>
-              <li>
-                <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/ss4.jpg"></a></div>
-              </li>
+                <?php foreach ($return['tournament']['data'] as $tournament){?>
+                        <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                <?php }?>
             </ul>
           </div>
         </div>
@@ -203,33 +195,19 @@ foreach($keywordsList as $word => $wordInfo)
           <div class="b_t">热门视频</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="yx_gl">
             <ul>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
-              <li>
-                <span>视频</span>
-                <a href="">皇族老板是谁？皇族老板跟RYL有什么关系？</a>
-              </li>
+                <?php foreach($return['video_list']['data'] as $key => $video) {?>
+                    <li>
+                        <span>视频</span>
+                        <a href="<?php echo $config['site_url'];?>/videodetail/<?php echo $video['id'];?>"><?php echo $video['title'];?></a>
+                    </li>
+                <?php }?>
             </ul>
           </div>
         </div>
