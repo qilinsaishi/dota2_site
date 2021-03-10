@@ -13,6 +13,7 @@ $data = [
     "keywordMapList"=>["fields"=>"content_id","source_type"=>"player","source_id"=>$player_id,"page_size"=>100,"content_type"=>"information","list"=>["page_size"=>6,"fields"=>"id,title,create_time"]],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
+    "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>4,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "currentPage"=>["name"=>"player","id"=>$player_id,"site_id"=>$config['site_id']]
 ];
 $return = curl_post($config['api_get'],json_encode($data),1);
@@ -110,80 +111,6 @@ $return3 = curl_post($config['api_get'],json_encode($data3),1);
       </ul>
     </div>
   </div>
-  <div class="ls_zj">
-    <div class="sy_bt">
-      <div class="b_t">历史比赛</div>
-      <div class="m_r">
-        <div class="bg"></div>
-        <a href="">MORE +</a>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <div class="bs_cj">
-      <table width="100%" border="1">
-        <tr>
-          <th scope="col">时间</th>
-          <th scope="col">对阵</th>
-          <th scope="col">英雄</th>
-          <th scope="col">結果</th>
-          <th scope="col">K</th>
-          <th scope="col">D</th>
-          <th scope="col">A</th>
-          <th scope="col">正補</th>
-          <th scope="col">反補</th>
-          <th scope="col" class="w_h">出裝</th>
-        </tr>
-        <tr>
-          <td>2020-02-05</td>
-          <td>VG vs TYU</td>
-          <td><img src="<?php echo $config['site_url'];?>/images/yx1.jpg"></td>
-          <td><span>勝</span></td>
-          <td>8</td>
-          <td>1</td>
-          <td>14</td>
-          <td>206</td>
-          <td>5</td>
-          <td class="w_h"><img src="<?php echo $config['site_url'];?>/images/cz1.jpg"><img src="<?php echo $config['site_url'];?>/images/cz2.jpg"><img src="<?php echo $config['site_url'];?>/images/cz3.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz5.jpg"></td>
-        </tr>
-        <tr>
-          <td>2020-02-05</td>
-          <td>VG vs TYU</td>
-          <td><img src="<?php echo $config['site_url'];?>/images/yx1.jpg"></td>
-          <td><span>勝</span></td>
-          <td>8</td>
-          <td>1</td>
-          <td>14</td>
-          <td>206</td>
-          <td>5</td>
-          <td class="w_h"><img src="<?php echo $config['site_url'];?>/images/cz1.jpg"><img src="<?php echo $config['site_url'];?>/images/cz2.jpg"><img src="<?php echo $config['site_url'];?>/images/cz3.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz5.jpg"></td>
-        </tr>
-        <tr>
-          <td>2020-02-05</td>
-          <td>VG vs TYU</td>
-          <td><img src="<?php echo $config['site_url'];?>/images/yx1.jpg"></td>
-          <td><span>勝</span></td>
-          <td>8</td>
-          <td>1</td>
-          <td>14</td>
-          <td>206</td>
-          <td>5</td>
-          <td class="w_h"><img src="<?php echo $config['site_url'];?>/images/cz1.jpg"><img src="<?php echo $config['site_url'];?>/images/cz2.jpg"><img src="<?php echo $config['site_url'];?>/images/cz3.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz5.jpg"></td>
-        </tr>
-        <tr>
-          <td>2020-02-05</td>
-          <td>VG vs TYU</td>
-          <td><img src="<?php echo $config['site_url'];?>/images/yx1.jpg"></td>
-          <td><span>勝</span></td>
-          <td>8</td>
-          <td>1</td>
-          <td>14</td>
-          <td>206</td>
-          <td>5</td>
-          <td class="w_h"><img src="<?php echo $config['site_url'];?>/images/cz1.jpg"><img src="<?php echo $config['site_url'];?>/images/cz2.jpg"><img src="<?php echo $config['site_url'];?>/images/cz3.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz4.jpg"><img src="<?php echo $config['site_url'];?>/images/cz5.jpg"></td>
-        </tr>
-      </table>
-    </div>
-  </div>
   <div class="sy_zh">
     <div class="row">
       <div class="col-lg-6 col-12">
@@ -253,25 +180,18 @@ $return3 = curl_post($config['api_get'],json_encode($data3),1);
       <div class="b_t">热门视频</div>
       <div class="m_r">
         <div class="bg"></div>
-        <a href="">MORE +</a>
+          <a href="<?php echo $config['site_url'];?>/videolist/">MORE +</a>
       </div>
       <div class="clear"></div>
     </div>
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <li class="col-3">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp5.jpg"></a></div>
-          </li>
-          <li class="col-3">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp6.jpg"></a></div>
-          </li>
-          <li class="col-3">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp7.jpg"></a></div>
-          </li>
-          <li class="col-3">
-            <div class="t_p"><a href=""><img src="<?php echo $config['site_url'];?>/images/tp8.jpg"></a></div>
-          </li>
+            <?php foreach($return['video_list']['data'] as $key => $video) {?>
+                <li class="col-3">
+                    <div class="t_p"><a href="<?php echo $config['site_url'];?>/videodetail/<?php echo $video['id'];?>"><img src="<?php echo $video['logo'];?>" title="<?php echo $video['title'];?>"></a></div>
+                </li>
+            <?php }?>
         </ul>
       </div>
     </div>
