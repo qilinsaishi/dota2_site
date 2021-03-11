@@ -50,7 +50,8 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
 <div class="head_h"></div>
 <div class="container">
   <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="<?php echo $config['site_url'];?>/tournamentlist/">游戏赛事</a> > <?php echo $return['tournament']['data']['tournament_name'];?></div>
-  <div class="jq_sc">
+  <?php if(count($return['matchList']['data'])>0) {?>
+    <div class="jq_sc">
     <div class="sy_bt">
       <div class="b_t">近期赛程</div>
       <div class="clear"></div>
@@ -91,6 +92,7 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
           <div class="swiper-button-next"></div>
       </div>
   </div>
+    <?php }?>
   <div class="sy_zh">
     <div class="row">
       <div class="col-lg-6 col-12">
