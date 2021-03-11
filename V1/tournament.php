@@ -9,6 +9,7 @@ if(strlen($tournament_id)<32)
 }
 $data = [
     "tournament"=>["source"=>"gamedota2","tournament_id"=>$tournament_id],
+    "tournamentList"=>["dataType"=>"tournamentList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"gamedota2"],
     "matchList"=>["source"=>"gamedota2","dataType"=>"matchList","tournament_id"=>$tournament_id,"page"=>1,"page_size"=>4],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>9,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
@@ -67,7 +68,12 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
                                   </div>
                                   <div class="s_g">
                                       <strong><?php echo $match['home_score'];?>&nbsp;:&nbsp;<?php echo $match['away_score'];?></strong>
-                                      <p>进行中</p>
+                                      <?php $start_time = strtotime($match['start_time']);
+                                      if(time()<$start_time){$status = "即将开始";}
+                                      elseif(time()>($start_time+3600)){$status = "已经结束";}
+                                      else{$status = "进行中";}
+                                      ?>
+                                      <p><?php echo $status;?></p>
                                   </div>
                                   <div class="z_d">
                                       <img src="<?php echo $match['away_team_info']['logo']??$return['defaultConfig']['data']['default_team_img']['value'];?>">
@@ -75,7 +81,7 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
                                   </div>
                                   <div class="clear"></div>
                               </div>
-                              <div class="s_s">S级联赛</div>
+                              <div class="s_s"></div>
                           </a></div>
                   <?php }?>
               </div>
@@ -216,9 +222,9 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
     <div class="zx_nr">
       <div class="tw_lb">
         <ul class="row">
-          <?php foreach ($return['tournament']['data'] as $tournament){?>
+          <?php foreach ($return['tournamentList']['data'] as $tournament){?>
               <li class="col-lg-3 col-6">
-                  <div class="t_p"><a href=""><img src="<?php echo $tournament['logo'];?>"></a></div>
+                  <div class="t_p"><a href="<?php echo $config['site_url']."/tournament/".$tournament['tournament_id'];?>"><img src="<?php echo $tournament['logo'];?>" title="<?php echo $tournament['tournament_name'];?>"></a></div>
               </li>
           <?php }?>
         </ul>
