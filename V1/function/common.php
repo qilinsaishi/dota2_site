@@ -143,7 +143,7 @@
         echo '<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>';
         //<![endif]-->
         echo '<link rel="stylesheet" href="'.$config['site_url'].'/css/swiper.min.css" type="text/css" />';
-        echo '<link rel="stylesheet" type="text/css" href="'.$config['site_url'].'/css/style.css" />';
+        echo '<link rel="stylesheet" type="text/css" href="'.$config['site_url'].'/css/style.css?v=1" />';
         echo '<script src="'.$config['site_url'].'/js/jquery-1.8.3.min.js" type="text/javascript" /></script>';
         echo '<script src="'.$config['site_url'].'/js/jquery.SuperSlide.2.1.1.js" type="text/javascript" /></script>';
         echo '<script src="'.$config['site_url'].'/js/main.js" type="text/javascript" /></script>';
