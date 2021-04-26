@@ -10,6 +10,7 @@
 $data = [
     "dota2Hero"=>[$hero_id],
     "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>7*86400],
+	"hotPlayerList"=>["dataType"=>"intergratedPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"fields"=>'pid,position,player_name,logo,team_id',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "keywordMapList"=>["fields"=>"content_id","source_type"=>"hero","source_id"=>$hero_id,"page_size"=>8,"content_type"=>"information","list"=>["page_size"=>6,"type"=>4,"fields"=>"id,title,create_time"],"cacheWith"=>"currentPage","cache_time"=>7*86400],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>8,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "currentPage"=>["name"=>"gameInt","site_id"=>$config['site_id']]
@@ -187,7 +188,7 @@ array_multisort(array_column($return['dota2Hero']['data']['talent'],"level"),SOR
           <div class="b_t">相关选手</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/players/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -195,10 +196,10 @@ array_multisort(array_column($return['dota2Hero']['data']['talent'],"level"),SOR
           <div class="rm_xs">
             <ul class="row">
                 <?php
-                foreach($return["playerList"]['data'] as $type => $player)
+                foreach($return["hotPlayerList"]['data'] as $type => $player)
                 {?>
                     <li class="col-4">
-                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/playerdetail/<?php echo $player['player_id'];?>">
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/player/<?php echo $player['pid'];?>">
                                 <img src="<?php echo $player['logo'];?>">
                                 <div class="w_z"><?php echo $player['player_name'];?></div>
                             </a></div>

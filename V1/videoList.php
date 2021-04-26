@@ -10,7 +10,7 @@ if($page==''){
 }
 $zxtype=($info['type']!="info")?"/strategylist":"/newslist";
 $data = [
-    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400],
+	"hotTeamList"=>["dataType"=>"intergratedTeamList","page"=>1,"page_size"=>6,"game"=>$config['game'],"rand"=>1,"fields"=>'tid,team_name,logo',"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
     "informationList"=>["game"=>$config['game'],"page"=>$page,"page_size"=>$info['page']['page_size'],"type"=>7,"fields"=>"*"],
     "informationList_2"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>6,"type"=>"1,2,3,5","fields"=>"*"],
@@ -110,19 +110,19 @@ $info['page']['total_page'] = intval($return['informationList']['count']/$info['
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="<?php echo $config['site_url']."/teamlist/";?>">MORE +</a>
+            <a href="<?php echo $config['site_url']."/teams/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="rm_zd zx_tj">
             <ul>
-                <?php $i=1;foreach ($return['teamList']['data'] as $team){
+                <?php $i=1;foreach ($return['hotTeamList']['data'] as $team){
                     if($i%2==1){?>
                         <li>
                         <div class="row"><?php } ?>
                     <div class="col-6">
-                        <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
+                        <div class="n_r"><a href="<?php echo $config['site_url']."/team/".$team['tid'];?>">
                                 <div class="t_b">
                                     <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
                                         <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />

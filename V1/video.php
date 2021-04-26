@@ -10,8 +10,8 @@ if($id<=0)
 $data = [
     "information"=>[$id],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
-    "playerList"=>["dataType"=>"totalPlayerList","page"=>1,"page_size"=>9,"game"=>$config['game'],"source"=>"wanplus","rand"=>1,"cacheWith"=>"currentPage","fields"=>'player_id,player_name,logo',"cache_time"=>86400*7],
+	"hotTeamList"=>["dataType"=>"intergratedTeamList","page"=>1,"page_size"=>6,"game"=>$config['game'],"rand"=>1,"fields"=>'tid,team_name,logo',"cacheWith"=>"currentPage","cache_time"=>86400*7],
+	"hotPlayerList"=>["dataType"=>"intergratedPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"fields"=>'pid,position,player_name,logo,team_id',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "defaultConfig"=>["keys"=>["contact","sitemap"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>3,"type"=>"7","rand"=>1,"fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>5,"type"=>"1,2,3,5","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
@@ -85,19 +85,19 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url']."/teamlist/";?>">MORE +</a>
+              <a href="<?php echo $config['site_url']."/teams/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="rm_zd zx_tj">
             <ul>
-                <?php $i=1;foreach ($return['teamList']['data'] as $team){
+                <?php $i=1;foreach ($return['hotTeamList']['data'] as $team){
                     if($i%2==1){?>
                         <li>
                         <div class="row"><?php } ?>
                     <div class="col-6">
-                        <div class="n_r"><a href="<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>">
+                        <div class="n_r"><a href="<?php echo $config['site_url']."/team/".$team['tid'];?>">
                                 <div class="t_b">
                                     <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
                                         <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
@@ -119,16 +119,16 @@ $return = curl_post($config['api_get'],json_encode($data),1);
           <div class="b_t">明星选手</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/player/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zy_nr m_b">
           <div class="rm_xs">
             <ul class="row">
-                <?php foreach($return['playerList']['data'] as $player){?>
+                <?php foreach($return['hotPlayerList']['data'] as $player){?>
                     <li class="col-4">
-                        <div class="t_p"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                        <div class="t_p"><a href="<?php echo $config['site_url']."/player/".$player['pid'];?>">
                                 <?php if(isset($return['defaultConfig']['data']['default_player_img'])){?>
                                     <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_player_img']['value'];?>" src="<?php echo $player['logo'];?>" title="<?php echo $player['player_name'];?>" />
                                 <?php }else{?>

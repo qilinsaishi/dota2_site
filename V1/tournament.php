@@ -12,8 +12,8 @@ $data = [
     "tournamentList"=>["dataType"=>"tournamentList","game"=>$config['game'],"page"=>1,"page_size"=>12,"source"=>"gamedota2"],
     "matchList"=>["source"=>"gamedota2","dataType"=>"matchList","tournament_id"=>$tournament_id,"page"=>1,"page_size"=>4],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>9,"type"=>"7","fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
-    "teamList"=>["dataType"=>"totalTeamList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'team_id,team_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
-    "playerList"=>["dataType"=>"totalPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"source"=>"wanplus","fields"=>'player_id,player_name,logo',"rand"=>1,"cacheWith"=>"currentPage"],
+	"hotTeamList"=>["dataType"=>"intergratedTeamList","page"=>1,"page_size"=>6,"game"=>$config['game'],"rand"=>1,"fields"=>'tid,team_name,logo',"cacheWith"=>"currentPage","cache_time"=>86400*7],
+	"hotPlayerList"=>["dataType"=>"intergratedPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>6,"fields"=>'pid,position,player_name,logo,team_id',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "defaultConfig"=>["keys"=>["contact","sitemap","default_player_img","default_team_img"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "informationList"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>12,"type"=>"3","fields"=>"id,title,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "currentPage"=>["name"=>"tournament","id"=>$tournament_id,"site_id"=>$config['site_id']]
@@ -147,17 +147,17 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
           <div class="b_t">热门战队</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/teamlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/teams/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zh_nr">
           <div class="zd_ph">
             <ul>
-                <?php $i=1;foreach ($return['teamList']['data'] as $team){?>
+                <?php $i=1;foreach ($return['hotTeamList']['data'] as $team){?>
                         <li>
                             <span class="s_z">NO.<?php echo $i;?></span>
-                            <a href = "<?php echo $config['site_url']."/teamdetail/".$team['team_id'];?>"><span class="z_d">
+                            <a href = "<?php echo $config['site_url']."/team/".$team['tid'];?>"><span class="z_d">
                         <?php if(isset($return['defaultConfig']['data']['default_team_img'])){?>
                             <img lazyload="true" data-original="<?php echo $return['defaultConfig']['data']['default_team_img']['value'];?>" src="<?php echo $team['logo'];?>" title="<?php echo $team['team_name'];?>" />
                         <?php }else{?>
@@ -176,16 +176,16 @@ if(!isset($return["tournament"]['data']['tournament_id']) || $return["tournament
           <div class="b_t">热门选手</div>
           <div class="m_r">
             <div class="bg"></div>
-              <a href="<?php echo $config['site_url'];?>/playerlist/">MORE +</a>
+              <a href="<?php echo $config['site_url'];?>/players/">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
         <div class="zh_nr">
           <div class="mx_tj">
             <ul class="row">
-                <?php foreach($return['playerList']['data'] as $player){?>
+                <?php foreach($return['hotPlayerList']['data'] as $player){?>
                     <li class="col-4">
-                        <div class="n_r"><a href="<?php echo $config['site_url']."/playerdetail/".$player['player_id'];?>">
+                        <div class="n_r"><a href="<?php echo $config['site_url']."/player/".$player['pid'];?>">
                                 <div class="t_p"><img src="<?php echo $player['logo'];?>"></div>
                                 <div class="w_z"><?php echo $player['player_name'];?></div>
                             </a></div>

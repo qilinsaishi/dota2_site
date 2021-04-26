@@ -10,7 +10,7 @@ if($id<=0)
 $data = [
     "information"=>[$id],
     "links"=>["page"=>1,"page_size"=>6,"site_id"=>$config['site_id']],
-    "playerList"=>["dataType"=>"totalPlayerList","page"=>1,"page_size"=>9,"game"=>$config['game'],"source"=>"wanplus","rand"=>1,"cacheWith"=>"currentPage","fields"=>'player_id,player_name,logo'],
+	"hotPlayerList"=>["dataType"=>"intergratedPlayerList","game"=>$config['game'],"page"=>1,"page_size"=>9,"fields"=>'pid,position,player_name,logo,team_id',"rand"=>1,"cacheWith"=>"currentPage","cache_time"=>86400*7],
     "defaultConfig"=>["keys"=>["contact","sitemap"],"fields"=>["name","key","value"],"site_id"=>$config['site_id']],
     "video_list"=>["dataType"=>"informationList","game"=>$config['game'],"page"=>1,"page_size"=>6,"type"=>"7","rand"=>1,"fields"=>"id,title,logo,site_time,create_time","cache_time"=>3600,"cacheWith"=>"currentPage"],
     "tournament"=>["dataType"=>"tournamentList","game"=>$config['game'],"page"=>1,"page_size"=>4,"source"=>"gamedota2"],
@@ -214,7 +214,7 @@ foreach($keywordsList as $word => $wordInfo)
           <div class="b_t">明星选手</div>
           <div class="m_r">
             <div class="bg"></div>
-            <a href="<?php echo $config['site_url']."/playerlist/";?>">MORE +</a>
+            <a href="<?php echo $config['site_url']."/players/";?>">MORE +</a>
           </div>
           <div class="clear"></div>
         </div>
@@ -222,10 +222,10 @@ foreach($keywordsList as $word => $wordInfo)
           <div class="rm_xs">
             <ul class="row">
                 <?php
-                foreach($return["playerList"]['data'] as $type => $player)
+                foreach($return["hotPlayerList"]['data'] as $type => $player)
                 {?>
                     <li class="col-4">
-                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/playerdetail/<?php echo $player['player_id'];?>">
+                        <div class="t_p"><a href="<?php echo $config['site_url'];?>/player/<?php echo $player['pid'];?>">
                                 <img src="<?php echo $player['logo'];?>">
                                 <div class="w_z"><?php echo $player['player_name'];?></div>
                             </a></div>
