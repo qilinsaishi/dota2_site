@@ -50,7 +50,7 @@ if(!isset($return["intergratedTeam"]['data']['tid']) || $return["intergratedTeam
 </div>
 <div class="head_h"></div>
 <div class="container">
-  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="">游戏战队</a> > <?php echo $return['intergratedTeam']['data']['team_name'];?></div>
+  <div class="dq_wz"><a href="<?php echo $config['site_url'];?>">首页</a> > <a href="<?php echo $config['site_url']; ?>/teams/">游戏战队</a> > <?php echo $return['intergratedTeam']['data']['team_name'];?></div>
   <div class="zd_js">
     <div class="row">
       <div class="col-lg-3 col-4">
